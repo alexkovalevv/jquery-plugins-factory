@@ -13,50 +13,19 @@
 		options: {},
 
 		_prefix: 'onp-wgt',
+		_scrope: 'plugin',
 
 		_defaults: {
 			appPublic: false,
-
-			// Sets whether the locker keep the state of always appears
-			demo: false,
-
-			// Optional. If set true, show credential link
-			credential: false,
-
-			// The language of the locker
-			lang: 'ru_RU',
-
-			// shows the terms
-			terms: false,
-			privacyPolicy: false,
-			termsPopup: false,
-
-			// Optional. If set true, the locker will generate events for the Google Analytics.
-			googleAnalytics: false,
-
-			// conditions that determine whether the locker has to be displayed
-			visibility: []
-		},
-
-		_init: function(options) {
-
-			if( options ) {
-				this.options = options;
-			}
-
-			this._prepareOptions();
-
-			this.id = this.options.id || this._generteId();
-
-			this.runHook('init');
+			demo: false
 		},
 
 		_prepareOptions: function() {
 			var defaults = $.extend(true, {}, this._defaults);
-			this._defaults = this.applyFilters('filter-default-options', defaults);
+			this._defaults = this.applyFilters(this.scrope + '-filter-default-options', defaults);
 
 			var options = $.extend(true, defaults, this.options);
-			this.options = this.applyFilters('filter-options', options);
+			this.options = this.applyFilters(this.scrope + '-filter-options', options);
 		},
 
 		_createSkin: function template(tmpl, context, filter) {

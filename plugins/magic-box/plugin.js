@@ -13,15 +13,15 @@
 		_defaults: {
 			// Text above the locker buttons.
 			text: {
-				header: null,
-				message: null
+				header: 'Текст по умолчанию',
+				message: 'Сообщение по умолчанию'
 			},
 
 			cssClass: null,
 
 			// Theme applied to the locker
 			theme: {
-				name: "starter"
+				name: "secrets"
 			},
 
 			// Sets overlap for the locked content.
@@ -75,21 +75,20 @@
 
 		_create: function() {
 			// подключаем социальные кнопки
-			var socialButtons = $.aikaComponent.socialbuttons.init({
-				// Настройки кнопок
-				buttons: {
-					theme: 'boogle',
-					effect: 'push',
-					size: 'medium'
-				}
-			});
+			/*var socialButtons = $.aikaComponent.socialbuttons.init({
+			 // Настройки кнопок
+			 buttons: {
+			 theme: 'boogle',
+			 effect: 'push',
+			 size: 'medium'
+			 }
+			 });*/
 
 			//$('body').append(socialButtons);
 
 			this._setupVariables();
 			this._initHooks();
 			this._createMarkup();
-			//$.aikaWidgetScreen.initScreens();
 		},
 
 		_prepareOptions: function() {
@@ -132,7 +131,7 @@
 		_setupVariables: function() {
 
 			// the css class of the theme
-			this.style = "onp-sl-" + this.options.theme.name;
+			this.style = this._uq(this.options.theme.name);
 
 			// should we use one of advanced overlay modes?
 			this.overlap = ( this.options.overlap.mode === 'full' ) ? false : this.options.overlap.mode;
@@ -191,11 +190,17 @@
 			this.magicBox = $("<div></div>");
 			this.magicBox.addClass(this._uq("magic-box"));
 			this.magicBox.addClass(this._uq(browser));
+			this.magicBox.addClass(this.style);
 
 			this.outerWrap = $("<div></div>").appendTo(this.magicBox);
 			this.outerWrap.addClass(this._uq('outer-wrap'));
-			this.innerWrap = $("<div></div>").appendTo(this.outerWrap);
+			this.innerWrap = $("<div>текст текст текст<br>текст<br>текст</div>").appendTo(this.outerWrap);
 			this.innerWrap.addClass(this._uq('inner-wrap'));
+
+			this._showScreen(this.innerWrap, 'default');
+
+			//var screen = $("<div class='onp-sl-screen onp-sl-screen-default'></div>").appendTo(this.innerWrap);
+			//this.screens['default'] = this.defaultScreen = screen;
 
 			$.aikaCore.isTouch()
 				? this.magicBox.addClass(this._uq("touch"))
@@ -288,8 +293,8 @@
 				}
 
 				// creating other markup for the overlap
-				this.overlapMagicBox = $("<div></div>").hide();
-				this.overlapMagicBox.addClass(this._uq('overlap-locker-box'));
+				this.overlapMagicBox = $("<div></div>");//.hide();
+				this.overlapMagicBox.addClass(this._uq('overlap-magic-box'));
 				this.overlapMagicBox.addClass(this._uq('position-' + this.options.overlap.position));
 				this.overlapMagicBox.append(this.magicBox);
 
@@ -321,9 +326,9 @@
 					self._updateLockerPosition();
 				});
 
-				this.addHook('size-changed', function() {
-					self._updateLockerPosition();
-				});
+				//this.addHook('size-changed', function() {
+				self._updateLockerPosition();
+				//});
 
 				if( this.options.overlap.position === 'scroll' ) {
 					$(window).scroll(function() {
@@ -355,14 +360,17 @@
 			// close button and timer if needed
 			//this.options.locker.close && this._createClosingCross();
 			//this.options.locker.timer && this._createTimer();
-		},
+		}
+
+		,
 
 		/**
 		 * Adds a CSS class.
 		 */
 		_addClass: function(className) {
 			this.magicBox.addClass(className);
-		},
+		}
+		,
 
 		/**
 		 * Loads fonts if needed.
@@ -396,7 +404,8 @@
 
 				$('<link id="onp-sl-font-' + hash + '" rel="stylesheet" type="text/css" href="' + url + '" >').appendTo("head");
 			}
-		},
+		}
+		,
 
 		/**
 		 * Updates the locker position for various overlap modes.
@@ -467,7 +476,8 @@
 				this.overlapMagicBox.css('marginTop', '-' + Math.floor(this.overlapMagicBox.innerHeight() / 2) + 'px');
 				return;
 			}
-		},
+		}
+		,
 
 		/**
 		 * Updates the locker position on scrolling.
@@ -525,7 +535,8 @@
 				.css('bottom', 'auto')
 				.css('width', 'auto')
 				.css('margin-top', this._baseOffset + 'px');
-		},
+		}
+		,
 
 		/**
 		 * Fires the hook when the locker gets visible in the current viewport.
@@ -594,7 +605,7 @@
 
 		_stopTrackVisability: function() {
 			$(window).unbind('.visability.opanda_' + this.id);
-		},
+		}
 
 	});
 
@@ -602,4 +613,5 @@
 		$('.content').aikaMagicBox();
 	});
 
-})(jQuery);
+})
+(jQuery);

@@ -1,0 +1,157 @@
+/**
+ * Общие стили плагина магическая коробка
+ * @author Alex Kovalev <alex.kovalevv@gmail.com>
+ * @copyright Alex Kovalev 01.11.2016
+ */
+
+@prefix: onp-wgt;
+@textBaseColor: #111;
+
+.box_sizing() {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.clear_margin() {
+  margin: 0 !important;
+}
+
+.clear_padding() {
+  padding: 0 !important;
+}
+
+.clear_all() {
+  .clear_margin;
+  .clear_padding;
+}
+
+.@{prefix}-magic-box {
+  position: relative !important;
+  background-color: #f9f9f9;
+  margin: 20px auto;
+  //min-height: 150px;
+  max-width: 625px;
+  font: normal normal 400 13px/170% "Arial", "Helvetica", sans-serif;
+  color: @textBaseColor;
+
+  &,
+  .@{prefix}-outer-wrap,
+  .@{prefix}-inner-wrap {
+    .box_sizing;
+  }
+  .@{prefix}-inner-wrap {
+    position: relative;
+    overflow: visible;
+  }
+  iframe {
+    .clear_margin;
+  }
+  p {
+    .clear_margin;
+  }
+  p + p {
+    margin-top: 7px !important;
+  }
+  .@{prefix}-header,
+  .@{prefix}-text .@{prefix}-strong {
+    font-size: 18px;
+    line-height: 130%;
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 7px;
+  }
+  .@{prefix}-header {
+    margin-bottom: 15px;
+  }
+  .@{prefix}-text {
+    text-align: center;
+    margin-bottom: 10px;
+    p {
+      line-height: 150%;
+    }
+  }
+}
+
+/* Issue #SL-24 */
+.@{prefix}-always-visible {
+  display: block !important;
+}
+
+/** ---------
+* Terms
+*-----------------*/
+
+.@{prefix}-terms-inner-wrap {
+  text-align: center;
+  padding: 20px 40px 0 40px;
+}
+
+.@{prefix}-terms {
+  &, a {
+    font-size: 12px;
+    color: #555;
+  }
+}
+
+/** ---------
+* Overlap Styles
+*-----------------*/
+
+.@{prefix}-overlap-box {
+  &,
+  .@{prefix}-overlap-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+}
+
+.@{prefix}-overlap-background {
+  background-color: #fefefe;
+  z-index: 25;
+
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  filter: alpha(opacity=80);
+  -moz-opacity: 0.8;
+  -khtml-opacity: 0.8;
+  opacity: .8;
+}
+
+.@{prefix}-blurring-mode {
+  .@{prefix}-overlap-background {
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+    filter: alpha(opacity=20);
+    -moz-opacity: 0.2;
+    -khtml-opacity: 0.2;
+    opacity: .2;
+  }
+}
+
+.@{prefix}-overlap-magic-box {
+  position: absolute;
+  top: 50%;
+  z-index: 40;
+  left: 0;
+  right: 0;
+  &.@{prefix}-position-top,
+  &.@{prefix}-position-scroll {
+    top: 0;
+  }
+}
+
+.@{prefix}-overlap-box .@{prefix}-magic-box {
+  margin: 0 auto !important;
+}
+
+/* fix for some themes */
+.@{prefix}-overlap-mode {
+  p {
+    float: none !important;
+  }
+}
+
+
+

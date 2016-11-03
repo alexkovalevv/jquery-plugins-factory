@@ -11,14 +11,17 @@
 	if( !$.aikaCore ) {
 		$.aikaCore = {};
 	}
+	if( !$.aikaCore.plugin ) {
+		$.aikaCore.plugin = {};
+	}
 	if( !$.aikaCore.base ) {
 		$.aikaCore.base = {};
 	}
 	if( !$.aikaComponent ) {
 		$.aikaComponent = {};
 	}
-	if( !$.aikaCore.i18n ) {
-		$.aikaCore.i18n = {};
+	if( !$.aikaCore.lang ) {
+		$.aikaCore.lang = {};
 	}
 	if( !$.aikaCore.tools ) {
 		$.aikaCore.tools = {};

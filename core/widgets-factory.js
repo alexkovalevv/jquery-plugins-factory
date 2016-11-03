@@ -18,7 +18,7 @@
 
 		var factory = {
 			createWidget: function(element, options) {
-				var widget = $.extend(true, {}, $.aikaCore.base, pluginObject);
+				var widget = $.extend(true, {}, $.aikaCore.plugin, pluginObject);
 				widget.element = $(element);
 				widget.options = $.extend(true, widget.options, options);
 
