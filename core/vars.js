@@ -8,28 +8,23 @@
 (function($) {
 	'use strict';
 
-	if( !$.aikaCore ) {
-		$.aikaCore = {};
+	if( !$.aikaApi ) {
+		$.aikaApi = {};
 	}
-	if( !$.aikaCore.plugin ) {
-		$.aikaCore.plugin = {};
+
+	if( !$.aikaPluginAbstract ) {
+		$.aikaPluginAbstract = {};
 	}
-	if( !$.aikaCore.base ) {
-		$.aikaCore.base = {};
+
+	if( !$.aikaApi.lang ) {
+		$.aikaApi.lang = {};
 	}
-	if( !$.aikaComponent ) {
-		$.aikaComponent = {};
+
+	if( !$.aikaApi.tools ) {
+		$.aikaApi.tools = {};
 	}
-	if( !$.aikaCore.lang ) {
-		$.aikaCore.lang = {};
-	}
-	if( !$.aikaCore.tools ) {
-		$.aikaCore.tools = {};
-	}
-	if( !$.aikaCore.storages ) {
-		$.aikaCore.storages = {};
-	}
-	if( !$.aikaCore.filters ) {
-		$.aikaCore.services = {};
+
+	if( !$.aikaApi.storages ) {
+		$.aikaApi.storages = {};
 	}
 })(jQuery);

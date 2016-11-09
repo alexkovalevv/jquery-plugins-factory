@@ -1,22 +1,22 @@
 /**
- * Social Buttons plugin
+ * Плагин Магическая коробка
+ *
  * @author Alex Kovalev <alex.kovalevv@gmail.com>
- * @copyright Alex Kovalev 01.11.2016
+ * @copyright Alex Kovalev 06.11.2016
  * @version 1.0
  */
 
+
 (function($) {
 	'use strict';
-
-	$.aikaCore.widget('aikaMagicBox', {
-
+	$.aikaCore.registerPlugin('aikaMagicBox', {
 		_defaults: {
-			// Text above the locker buttons.
-			text: {
-				header: 'Текст по умолчанию',
-				message: 'Сообщение по умолчанию'
-			},
+			contentLock: true,
 
+			// Содержание магической коробки, будет отображено внутри.
+			content: null,
+
+			// Пользовательский класс для стализации коробки
 			cssClass: null,
 
 			// Theme applied to the locker
@@ -49,53 +49,29 @@
 			// Turns on the highlight effect
 			highlight: true,
 
-			// --
-			// magicBox functionality.
-			magicBox: {
+			// Sets whether a user may remove the locker by a cross placed at the top-right corner.
+			close: false,
 
-				// Sets whether a user may remove the locker by a cross placed at the top-right corner.
-				close: false,
+			// Optional. If false, the content will be unlocked forever, else will be
+			// unlocked for the given number of seconds.
+			expires: false,
 
-				// Sets a timer interval to unlock content when the zero is reached.
-				// If the value is 0, the timer will not be created.
-				timer: 0,
-
-				// Sets whether the locker appears for mobiles devides.
-				mobile: true,
-
-				// Optional. If false, the content will be unlocked forever, else will be
-				// unlocked for the given number of seconds.
-				expires: false,
-
-				// Optional. Forces to use cookies instead of a local storage
-				useCookies: false
-
-			}
+			// Optional. Forces to use cookies instead of a local storage
+			useCookies: false
 		},
 
 		_create: function() {
-			// подключаем социальные кнопки
-			/*var socialButtons = $.aikaComponent.socialbuttons.init({
-			 // Настройки кнопок
-			 buttons: {
-			 theme: 'boogle',
-			 effect: 'push',
-			 size: 'medium'
-			 }
-			 });*/
-
-			//$('body').append(socialButtons);
+			var self = this;
 
 			this._setupVariables();
-			this._initHooks();
-			this._createMarkup();
+			//this._createMarkup();
 		},
 
 		_prepareOptions: function() {
 			var self = this;
 
-			var defaults = $.extend(true, {}, this._defaults);
-			defaults = this.applyFilters('filter-default-options', defaults);
+			// вызываем родительский метод
+			this.superclass._prepareOptions.call(this);
 
 			if( this.options.theme && !$.isPlainObject(this.options.theme) ) {
 				this.options.theme = {name: self.options.theme};
@@ -110,19 +86,15 @@
 			// some themes also have defaults options,
 			// merging the global default option with the theme default options
 			if( $.aikaMagicBox.themes[theme] ) {
-				defaults = $.extend(true, {}, defaults, $.aikaMagicBox.themes[theme]);
+				this.addFilter('filter-default-options', function(defaults) {
+					return $.extend(true, {}, defaults, $.aikaMagicBox.themes[theme])
+				});
 			}
-
-			// now merges with the options specified by a user
-			var options = $.extend(true, defaults, this.options);
-
-			this.options = this.applyFilters('filter-options', options);
 
 			// ie 10-11 fix (they doesn't support the blur filter)
-			if( 'blurring' === this.options.overlap.mode && !$.aikaCore.tools.supportBlurring() ) {
+			if( 'blurring' === this.options.overlap.mode && !$.aikaApi.supportBlurring() ) {
 				this.options.overlap.mode = this.options.overlap.altMode;
 			}
-
 		},
 
 		/**
@@ -141,13 +113,17 @@
 		/**
 		 * Inits extras.
 		 */
-		_initHooks: function() {
+		_registerHooks: function() {
 			var self = this;
+
+			this.addHook('init', function() {
+				self.runHook('plugin-magicbox-init');
+			});
 
 			var intercationAccounted = false;
 			var getImpress = false;
 
-			this.addHook('raw-interaction', function() {
+			this.addHook('plugin-magicbox-raw-interaction', function() {
 				if( !getImpress ) {
 					return;
 				}
@@ -156,16 +132,131 @@
 					return;
 				}
 				intercationAccounted = true;
-				self.runHook('interaction');
+				self.runHook('plugin-magicbox-interaction');
 			});
 
-			this.addHook('raw-impress', function() {
+			this.addHook('plugin-magicbox-raw-impress', function() {
 				if( self._currentScreenName !== 'default' ) {
 					return;
 				}
 				getImpress = true;
-				self.runHook('impress');
+				self.runHook('plugin-magicbox-impress');
 			});
+
+			this.addHook('plugin-magicbox-show', function(sender) {
+				self._showMagicBox(sender);
+			});
+
+			this.addHook('plugin-magicbox-hide', function(sender) {
+				self._hideMagicBox(sender);
+			});
+		},
+
+		_initScreens: function() {
+			var self = this;
+
+			this.superclass._initScreens.call(this);
+
+			// SCREEN: Default
+			this._registerScreen('default',
+				function($holder, options) {
+					$holder.removeClass(self._uq('non-default-screen'));
+
+					if( self.options.content ) {
+						if( typeof self.options.content === 'string' ) {
+							$holder.html(self.options.content);
+						} else if( typeof self.options.content === 'object' ) {
+							$holder.append(self.options.content);
+						}
+					}
+				}
+			);
+		},
+
+		_showMagicBox: function(sender) {
+			var self = this;
+
+			this.runHook('plugin-magicbox-before-show');
+
+			if( this._isVisible ) {
+				return;
+			}
+			if( !this._markupIsCreated ) {
+				this._createMarkup();
+			}
+
+			if( !this.overlap ) {
+				this.element.hide();
+				this.magicBox.fadeIn(1000);
+
+			} else {
+
+				this.overlapMagicBox.fadeIn(1000, function() {
+					self._updateLockerPosition();
+				});
+				self._updateLockerPosition();
+			}
+
+			this._isVisible = true;
+
+			this.runHook('plugin-magicbox-after-show');
+
+			setTimeout(function() {
+				self._startTrackVisability();
+			}, 1500);
+		},
+
+		_hideMagicBox: function(sender, content) {
+			var self = this;
+
+			this.runHook('plugin-magicbox-before-hide');
+
+			// returns if we have turned off the locker
+			/*if( this.options.magicBox.off ) {
+			 return;
+			 }*/
+
+			/*if (!this._isLocked) {
+			 this.runHook('magic-box-cancel', [sender]);
+			 this._showContent( sender === "button" );
+			 return false;
+			 }*/
+
+			//this._showContent(true);
+
+			if( self.overlap ) {
+				if( self.overlapBox ) {
+					self.overlapBox.hide();
+				}
+				if( self.blurArea ) {
+					self.blurArea.unblur();
+				}
+			} else {
+				if( self.magicBox ) {
+					self.magicBox.hide();
+				}
+			}
+
+			if( self.magicBox ) {
+				self.magicBox.hide();
+			}
+
+			//if( !useEffects ) {
+			//self.element.show();
+			//} else {
+			self.element.fadeIn(1000, function() {
+				self.options.highlight && self.element.effect && self.element.effect('highlight', {color: '#fffbcc'}, 800);
+			});
+			//}
+
+			//self.runHook('locker-after-show-content');
+
+			this._isVisible = false;
+
+			this.runHook('plugin-magicbox-after-hide');
+
+			//this.runHook('magic-box-hide', [sender, sernderName, value]);
+			//this.runHook('unlocked', [sender, sernderName, value]);
 		},
 
 		// --------------------------------------------------------------------------------------
@@ -183,9 +274,9 @@
 			var element = (this.element.parent().is('a')) ? this.element.parent() : this.element;
 			element.addClass(this._uq("content"));
 
-			var browser = ($.aikaCore.browser.mozilla && 'mozilla') ||
-				($.aikaCore.browser.opera && 'opera') ||
-				($.aikaCore.browser.webkit && 'webkit') || 'msie';
+			var browser = ($.aikaApi.browser.mozilla && 'mozilla') ||
+				($.aikaApi.browser.opera && 'opera') ||
+				($.aikaApi.browser.webkit && 'webkit') || 'msie';
 
 			this.magicBox = $("<div></div>");
 			this.magicBox.addClass(this._uq("magic-box"));
@@ -194,15 +285,13 @@
 
 			this.outerWrap = $("<div></div>").appendTo(this.magicBox);
 			this.outerWrap.addClass(this._uq('outer-wrap'));
-			this.innerWrap = $("<div>текст текст текст<br>текст<br>текст</div>").appendTo(this.outerWrap);
+			this.innerWrap = $("<div></div>").appendTo(this.outerWrap);
 			this.innerWrap.addClass(this._uq('inner-wrap'));
-
-			this._showScreen(this.innerWrap, 'default');
 
 			//var screen = $("<div class='onp-sl-screen onp-sl-screen-default'></div>").appendTo(this.innerWrap);
 			//this.screens['default'] = this.defaultScreen = screen;
 
-			$.aikaCore.isTouch()
+			$.aikaApi.isTouch()
 				? this.magicBox.addClass(this._uq("touch"))
 				: this.magicBox.addClass(this._uq("no-touch"));
 
@@ -326,9 +415,9 @@
 					self._updateLockerPosition();
 				});
 
-				//this.addHook('size-changed', function() {
-				self._updateLockerPosition();
-				//});
+				this.addHook('size-changed', function() {
+					self._updateLockerPosition();
+				});
 
 				if( this.options.overlap.position === 'scroll' ) {
 					$(window).scroll(function() {
@@ -360,17 +449,17 @@
 			// close button and timer if needed
 			//this.options.locker.close && this._createClosingCross();
 			//this.options.locker.timer && this._createTimer();
-		}
 
-		,
+			this._showScreen(this.innerWrap, 'default');
+			//this._showScreen(this.innerWrap, 'data-processing');
+		},
 
 		/**
 		 * Adds a CSS class.
 		 */
 		_addClass: function(className) {
 			this.magicBox.addClass(className);
-		}
-		,
+		},
 
 		/**
 		 * Loads fonts if needed.
@@ -391,21 +480,20 @@
 					family = family + ":" + fontData.styles.join(",");
 				}
 
-				var url = $.aikaCore.tools.updateQueryStringParameter(base, 'family', family);
+				var url = $.aikaApi.tools.updateQueryStringParameter(base, 'family', family);
 
 				if( fontData.subset && fontData.subset.length ) {
-					url = $.aikaCore.tools.updateQueryStringParameter(url, 'subset', fontData.subset.join(","));
+					url = $.aikaApi.tools.updateQueryStringParameter(url, 'subset', fontData.subset.join(","));
 				}
 
-				var hash = $.aikaCore.tools.hash(url);
+				var hash = $.aikaApi.tools.hash(url);
 				if( $("#onp-sl-font-" + hash).length > 0 ) {
 					continue;
 				}
 
 				$('<link id="onp-sl-font-' + hash + '" rel="stylesheet" type="text/css" href="' + url + '" >').appendTo("head");
 			}
-		}
-		,
+		},
 
 		/**
 		 * Updates the locker position for various overlap modes.
@@ -476,8 +564,7 @@
 				this.overlapMagicBox.css('marginTop', '-' + Math.floor(this.overlapMagicBox.innerHeight() / 2) + 'px');
 				return;
 			}
-		}
-		,
+		},
 
 		/**
 		 * Updates the locker position on scrolling.
@@ -535,8 +622,7 @@
 				.css('bottom', 'auto')
 				.css('width', 'auto')
 				.css('margin-top', this._baseOffset + 'px');
-		}
-		,
+		},
 
 		/**
 		 * Fires the hook when the locker gets visible in the current viewport.
@@ -605,13 +691,27 @@
 
 		_stopTrackVisability: function() {
 			$(window).unbind('.visability.opanda_' + this.id);
+		},
+
+		// --------------------------------------------------------------------------------------
+		// Close Cross
+		// --------------------------------------------------------------------------------------
+
+		/**
+		 * Creates the markup for the close icon.
+		 */
+		_createClosingCross: function() {
+			var self = this;
+
+			$("<div class='onp-sl-cross' title='" + $.pandalocker.lang.misc_close + "' />")
+				.prependTo(this.locker)
+				.click(function() {
+					if( !self.close || !self.close(self) ) {
+						self.runHook("closing-cross");
+					}
+				});
 		}
 
 	});
 
-	$(document).ready(function() {
-		$('.content').aikaMagicBox();
-	});
-
-})
-(jQuery);
+})(jQuery);

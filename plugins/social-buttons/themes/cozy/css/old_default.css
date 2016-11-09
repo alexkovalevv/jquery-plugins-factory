@@ -1,0 +1,368 @@
+/*!
+ * Social buttons theme "cozy"
+ * Copyright 2016, Alex Kovalev, <alex.kovalevv@gmail.com>
+ */
+
+/*.aika-cozy-sbtn {
+    margin-right: 15px;
+    font-family: Tahoma, arial, sans-serif;
+}
+
+.aika-cozy-sbtns-contanier li:last-child .aika-cozy-sbtn {
+    margin-right: 0;
+}*/
+
+/*.aika-cozy-sbtn-icon svg {
+    height: 100%;
+    width: 100%;
+    fill: #fff;
+}
+
+.aika-cozy-sbtns-big {
+    font-size: 13px;
+}
+
+.aika-cozy-sbtns-big .aika-cozy-sbtn-icon {
+    height: 18px;
+    width: 18px;
+    margin: 8px;
+    background-size: 18px 18px;
+}
+
+.aika-cozy-sbtns-big .aika-cozy-sbtn-title {
+    line-height: 24px;
+}
+
+.aika-cozy-sbtns-big .aika-cozy-sbtn-counter {
+    font-size: 14px;
+    line-height: 34px;
+    padding: 0 8px;
+}
+
+.aika-cozy-sbtns-big .aika-cozy-sbtn-counter:before {
+    margin-left: -8px;
+}
+
+.aika-cozy-sbtns-big .aika-sbtns-total-counter {
+    font-size:18px;
+}
+
+.aika-cozy-sbtns-big .aika-cozy-sbtn-icon_more:before {
+    font-size: 12px;
+    line-height: 24px;
+}
+.aika-cozy-sbtns-big .aika-cozy-sbtn-bage + .aika-cozy-sbtn-title {
+    margin-left: 10px;
+}
+
+.aika-cozy-sbtns-medium {
+    font-size: 13px;
+}
+
+.aika-cozy-sbtns-medium .aika-cozy-sbtn-icon {
+    height: 14px;
+    width: 14px;
+    margin: 5px;
+    background-size: 14px 14px;
+}
+
+.aika-cozy-sbtns-medium .aika-cozy-sbtn-title {
+    line-height: 24px;
+}
+
+.aika-cozy-sbtns-medium .aika-cozy-sbtn {
+    margin-right: 10px;
+}
+
+.aika-cozy-sbtns-medium .aika-cozy-sbtn-counter {
+    font-size: 12px;
+    line-height: 24px;
+    padding: 0 8px;
+}
+
+.aika-cozy-sbtns-medium .aika-cozy-sbtn-counter:before {
+    margin-left: -8px;
+}
+
+.aika-cozy-sbtns-medium .aika-sbtns-total-counter {
+    font-size:12px;
+}
+
+.aika-cozy-sbtns-medium .aika-sbtns-total-counter > span {
+    font-size:9px;
+}
+
+.aika-cozy-sbtns-medium .aika-cozy-sbtn-icon_more:before {
+    font-size: 12px;
+    line-height: 24px;
+}
+.aika-cozy-sbtns-medium .aika-cozy-sbtn-bage + .aika-cozy-sbtn-title {
+    margin-left: 10px;
+}
+
+.aika-cozy-sbtns-small {
+    font-size: 12px;
+}
+
+.aika-cozy-sbtns-small .aika-cozy-sbtn-icon {
+    height: 12px;
+    width: 12px;
+    margin: 5px;
+    background-size: 18px 18px;
+}
+.aika-cozy-sbtns-small .aika-cozy-sbtn-title {
+    line-height: 18px;
+}
+
+.aika-cozy-sbtns-small .aika-cozy-sbtn {
+    margin-right: 7px;
+}
+
+.aika-cozy-sbtns-small .aika-cozy-sbtn-counter {
+    font-size: 10px;
+    line-height: 22px;
+    padding: 0 6px;
+}
+
+.aika-cozy-sbtns-small .aika-cozy-sbtn-counter:before {
+    margin-left: -6px;
+}
+
+.aika-cozy-sbtns-small .aika-sbtns-total-counter {
+    font-size:11px;
+}
+
+.aika-cozy-sbtns-small .aika-sbtns-total-counter > span {
+    font-size:7px;
+}
+
+.aika-cozy-sbtns-small .aika-cozy-sbtn-icon_more:before {
+    font-size: 10px;
+    line-height: 18px;
+}
+.aika-cozy-sbtns-small .aika-cozy-sbtn-bage + .aika-cozy-sbtn-title {
+    margin-left: 6px;
+}
+
+.aika-cozy-sbtns-contanier li {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.aika-cozy-sbtns-contanier li > .aika-cozy-sbtn > .aika-cozy-sbtn-title {
+    display: none;
+}
+
+.aika-cozy-direction-vertical > .aika-cozy-sbtns-contanier li {
+    display: block;
+    margin-right: 0;
+}
+
+.aika-cozy-direction-vertical > .aika-cozy-sbtns-contanier li > .aika-cozy-sbtn > .aika-cozy-sbtn-bage > .aika-cozy-sbtn-counter {
+    display: none;
+}
+
+.aika-cozy-sbtns-contanier ul {
+    display: inline-block;
+    vertical-align: top;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+.aika-cozy-sbtns-contanier li {
+    font-family: Arial, sans;
+    display: inline-block;
+}
+
+.aika-cozy-sbtns-contanier li:hover {
+    opacity: 0.9;
+}*/
+
+.aika-cozy-sbtn {
+    display: inline-block;
+    vertical-align: top;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.aika-cozy-sbtn-bage {
+    display: inline-block;
+    vertical-align: top;
+    border-radius: 2px;
+    color: #fff;
+    overflow: hidden;
+    position: relative;
+}
+
+.aika-cozy-sbtn-icon {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.aika-cozy-sbtn-icon:active {
+    box-shadow: inset 0 2px 0 0 rgba(0, 0, 0, 0.1);
+}
+
+.aika-cozy-sbtn-counter {
+    display: none;
+}
+
+.aika-cozy-sbtn-counter:before {
+    content: "";
+    position: absolute;
+    width: 1px;
+    top: 2px;
+    bottom: 2px;
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEX///+nxBvIAAAAAXRSTlMz/za5cAAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=") 0 0 repeat-y;
+}
+
+.aika-cozy-sbtns-counter-available .aika-cozy-sbtn-counter {
+    display: inline-block;
+}
+
+.aika-cozy-sbtn-title {
+    display: inline-block;
+    color: #000;
+    vertical-align: bottom;
+}
+
+.aika-cozy-sbtn-title:hover {
+    color: #f00;
+}
+
+.aika-cozy-sbtn-blogger-share .aika-cozy-sbtn-bage {
+    background-color: #fb8f3d;
+}
+
+.aika-cozy-sbtn-collections-share .aika-cozy-sbtn-bage {
+    background-color: #eb1c00;
+}
+
+.aika-cozy-sbtn-delicious-share .aika-cozy-sbtn-bage {
+    background-color: #31a9ff;
+}
+
+.aika-cozy-sbtn-digg-share .aika-cozy-sbtn-bage {
+    background-color: #000;
+}
+
+.aika-cozy-sbtn-evernote-share .aika-cozy-sbtn-bage {
+    background-color: #24d666;
+}
+
+.aika-cozy-sbtn-facebook-share .aika-cozy-sbtn-bage {
+    background-color: #3b5998;
+}
+
+.aika-cozy-sbtn-google-share .aika-cozy-sbtn-bage {
+    background-color: #dc4e41;
+}
+
+.aika-cozy-sbtn-linkedin-share .aika-cozy-sbtn-bage {
+    background-color: #0083be;
+}
+
+.aika-cozy-sbtn-lj-share .aika-cozy-sbtn-bage {
+    background-color: #0d425a;
+}
+
+.aika-cozy-sbtn-mail-share .aika-cozy-sbtn-bage {
+    background-color: #168de2;
+}
+
+.aika-cozy-sbtn-odnoklassniki-share .aika-cozy-sbtn-bage {
+    background-color: #eb722e;
+}
+
+.aika-cozy-sbtn-pinterest-share .aika-cozy-sbtn-bage {
+    background-color: #c20724;
+}
+
+.aika-cozy-sbtn-pocket-share .aika-cozy-sbtn-bage {
+    background-color: #ee4056;
+}
+
+.aika-cozy-sbtn-qzone-share .aika-cozy-sbtn-bage {
+    background-color: #f5b53c;
+}
+
+.aika-cozy-sbtn-reddit-share .aika-cozy-sbtn-bage {
+    background-color: #ff4500;
+}
+
+.aika-cozy-sbtn-renren-share .aika-cozy-sbtn-bage {
+    background-color: #1760a7;
+}
+
+.aika-cozy-sbtn-sinaWeibo-share .aika-cozy-sbtn-bage {
+    background-color: #c53220;
+}
+
+.aika-cozy-sbtn-skype-share .aika-cozy-sbtn-bage {
+    background-color: #00aff0;
+}
+
+.aika-cozy-sbtn-surfingbird-share .aika-cozy-sbtn-bage {
+    background-color: #30baff;
+}
+
+.aika-cozy-sbtn-telegram-share .aika-cozy-sbtn-bage {
+    background-color: #64a9dc;
+}
+
+.aika-cozy-sbtn-tencentWeibo-share .aika-cozy-sbtn-bage {
+    background-color: #53a9d7;
+}
+
+.aika-cozy-sbtn-tumblr-share .aika-cozy-sbtn-bage {
+    background-color: #547093;
+}
+
+.aika-cozy-sbtn-twitter-tweet .aika-cozy-sbtn-bage {
+    background-color: #00aced;
+}
+
+/*.aika-cozy-sbtns-small .aika-cozy-sbtn-twitter-tweet .aika-cozy-sbtn-icon {
+    background: url(https://yastatic.net/share2/v-1.12.0/png/a43b1157727712749e88b1e4b223d116.png);
+    background: url(data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjQgMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTIwIDcuNTM5YTYuNTYgNi41NiAwIDAgMS0xLjg4NS41MTcgMy4yOTQgMy4yOTQgMCAwIDAgMS40NDMtMS44MTYgNi41NzUgNi41NzUgMCAwIDEtMi4wODUuNzk2IDMuMjgzIDMuMjgzIDAgMCAwLTUuNTkzIDIuOTk0QTkuMzIgOS4zMiAwIDAgMSA1LjExNCA2LjZhMy4yOCAzLjI4IDAgMCAwIDEuMDE2IDQuMzgyIDMuMjc0IDMuMjc0IDAgMCAxLTEuNDg3LS40MXYuMDQxYTMuMjg1IDMuMjg1IDAgMCAwIDIuNjMzIDMuMjE4IDMuMzA1IDMuMzA1IDAgMCAxLTEuNDgyLjA1NiAzLjI4NiAzLjI4NiAwIDAgMCAzLjA2NiAyLjI4QTYuNTg1IDYuNTg1IDAgMCAxIDQgMTcuNTI0IDkuMjkxIDkuMjkxIDAgMCAwIDkuMDMyIDE5YzYuMDM4IDAgOS4zNC01IDkuMzQtOS4zMzcgMC0uMTQzLS4wMDQtLjI4NS0uMDEtLjQyNUE2LjY3MiA2LjY3MiAwIDAgMCAyMCA3LjUzOHoiIGZpbGw9IiNGRkYiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvc3ZnPg==), linear-gradient(transparent, transparent);
+}
+
+.aika-cozy-sbtns-medium .aika-cozy-sbtn-twitter-tweet .aika-cozy-sbtn-icon {
+    background: url(https://yastatic.net/share2/v-1.12.0/png/90b4b34825dd269b61ac35ebd478f1cd.png);
+    background: url(data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjQgMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTIwIDcuNTM5YTYuNTYgNi41NiAwIDAgMS0xLjg4NS41MTcgMy4yOTQgMy4yOTQgMCAwIDAgMS40NDMtMS44MTYgNi41NzUgNi41NzUgMCAwIDEtMi4wODUuNzk2IDMuMjgzIDMuMjgzIDAgMCAwLTUuNTkzIDIuOTk0QTkuMzIgOS4zMiAwIDAgMSA1LjExNCA2LjZhMy4yOCAzLjI4IDAgMCAwIDEuMDE2IDQuMzgyIDMuMjc0IDMuMjc0IDAgMCAxLTEuNDg3LS40MXYuMDQxYTMuMjg1IDMuMjg1IDAgMCAwIDIuNjMzIDMuMjE4IDMuMzA1IDMuMzA1IDAgMCAxLTEuNDgyLjA1NiAzLjI4NiAzLjI4NiAwIDAgMCAzLjA2NiAyLjI4QTYuNTg1IDYuNTg1IDAgMCAxIDQgMTcuNTI0IDkuMjkxIDkuMjkxIDAgMCAwIDkuMDMyIDE5YzYuMDM4IDAgOS4zNC01IDkuMzQtOS4zMzcgMC0uMTQzLS4wMDQtLjI4NS0uMDEtLjQyNUE2LjY3MiA2LjY3MiAwIDAgMCAyMCA3LjUzOHoiIGZpbGw9IiNGRkYiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvc3ZnPg==), linear-gradient(transparent, transparent);
+}
+*/
+
+.aika-cozy-sbtn-viber-share .aika-cozy-sbtn-bage {
+    background-color: #7b519d;
+}
+
+.aika-cozy-sbtn-vkontakte-share .aika-cozy-sbtn-bage {
+    background-color: #48729e;
+}
+.aika-cozy-sbtn-whatsapp-share .aika-cozy-sbtn-bage {
+    background-color: #65bc54;
+}
+
+.aika-cozy-sbtns-small .aika-cozy-sbtn-facebook-share .aika-cozy-sbtn-icon {
+    margin-left: 8px;
+}
+
+.aika-cozy-sbtns-medium .aika-cozy-sbtn-facebook-share .aika-cozy-sbtn-icon {
+    margin-left: 8px;
+    margin-right: 0;
+}
+
+.aika-cozy-sbtns-small .aika-cozy-sbtn-vkontakte-share .aika-cozy-sbtn-icon {
+    widht: 10px;
+    height: 10px;
+}
+
+.aika-cozy-sbtns-medium .aika-cozy-sbtn-vkontakte-share .aika-cozy-sbtn-icon {
+    widht: 12px;
+    height: 12px;
+    margin-top: 6px;
+}
