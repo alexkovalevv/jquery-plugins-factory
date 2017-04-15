@@ -5,33 +5,15 @@
     <title>Тестирование aika framework</title>
     <script src="libs/jquery.min.js"></script>
     <script src="core/vars.js"></script>
-    <script src="core/tools.js"></script>
-    <script src="core/langs/ru_RU.js"></script>
-    <script src="core/filters.js"></script>
-    <script src="core/plugin-abstract.js"></script>
+    <script src="core/includes/api.tools.js"></script>
+    <script src="core/includes/api.filters.js"></script>
+    <script src="core/includes/api.sdk.js"></script>
     <script src="core/core.js"></script>
-    <!-- Плагин социальных кнопок -->
-    <script src="plugins/social-buttons/vars.js"></script>
-    <link rel="stylesheet" href="plugins/social-buttons/css/default.css">
-    <link rel="stylesheet" href="plugins/social-buttons/css/hover.css">
-    <link rel="stylesheet" href="plugins/social-buttons/themes/cozy/css/default.css">
-    <script src="plugins/social-buttons/themes/cozy/init.js"></script>
-    <link rel="stylesheet" href="plugins/social-buttons/themes/boogle/css/default.css">
-    <script src="plugins/social-buttons/themes/boogle/init.js"></script>
-    <link rel="stylesheet" href="plugins/social-buttons/themes/greater/css/default.css">
-    <script src="plugins/social-buttons/themes/greater/init.js"></script>
-    <link rel="stylesheet" href="plugins/social-buttons/themes/fire/css/default.css">
-    <script src="plugins/social-buttons/themes/fire/init.js"></script>
-    <script src="plugins/social-buttons/buttons/includes/control.social-button.js"></script>
-    <script src="plugins/social-buttons/buttons/button.facebook.share.js"></script>
-    <script src="plugins/social-buttons/buttons/button.twitter.tweet.js"></script>
-    <script src="plugins/social-buttons/buttons/button.google.share.js"></script>
-    <script src="plugins/social-buttons/buttons/button.vkontakte.share.js"></script>
-    <script src="plugins/social-buttons/buttons/button.odnoklassniki.share.js"></script>
-    <script src="plugins/social-buttons/buttons/button.mail.share.js"></script>
-    <script src="plugins/social-buttons/buttons/button.pinterest.share.js"></script>
-    <script src="plugins/social-buttons/buttons/button.linkedin.share.js"></script>
-    <script src="plugins/social-buttons/buttons/button.tumblr.share.js"></script>
+    <script src="core/plugin.js"></script>
+    <!-- Плагин социальных кнопок-->
+    <script src="plugins/social-buttons/includes/class.control.js"></script>
+    <script src="plugins/social-buttons/buttons/facebook.share.js"></script>
+    <script src="plugins/social-buttons/buttons/google.share.js"></script>
     <script src="plugins/social-buttons/plugin.js"></script>
     <!-- /Компонент социальных кнопок -->
     <!-- Плагин магическая коробка -->
@@ -48,8 +30,28 @@
     <!-- /Инъекция плагина -->
     <script src="plugins/locker/plugin.js"></script>
     <!-- /Плагин замок -->
+    <script>
+        (function($) {
+            $(function() {
+                $('.test').aikaSocialButtons({
+                    order: ['facebook-share', 'google-share'],
+                    facebook: {
+                        share: {
+                            url: 'https://yandex.ru'
+                        }
+                    },
+                    google: {
+                        share: {
+                            url: 'https://yandex.ru'
+                        }
+                    }
+                });
+            });
+        })(jQuery);
+    </script>
 </head>
 <body>
+<div class="test"></div>
 <div class="content">
     Он собрал семь своих заглавных букв, подпоясал инициал за пояс и пустился в дорогу. Взобравшись на первую вершину
     курсивных гор, бросил он последний взгляд назад, на силуэт своего родного города Буквоград, на заголовок деревни

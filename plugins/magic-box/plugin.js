@@ -103,7 +103,7 @@
 		_setupVariables: function() {
 
 			// the css class of the theme
-			this.style = this._uq(this.options.theme.name);
+			this.style = this.uq(this.options.theme.name);
 
 			// should we use one of advanced overlay modes?
 			this.overlap = ( this.options.overlap.mode === 'full' ) ? false : this.options.overlap.mode;
@@ -160,7 +160,7 @@
 			// SCREEN: Default
 			this._registerScreen('default',
 				function($holder, options) {
-					$holder.removeClass(self._uq('non-default-screen'));
+					$holder.removeClass(self.uq('non-default-screen'));
 
 					if( self.options.content ) {
 						if( typeof self.options.content === 'string' ) {
@@ -272,28 +272,28 @@
 			//this._loadFonts();
 
 			var element = (this.element.parent().is('a')) ? this.element.parent() : this.element;
-			element.addClass(this._uq("content"));
+			element.addClass(this.uq("content"));
 
 			var browser = ($.aikaApi.browser.mozilla && 'mozilla') ||
 				($.aikaApi.browser.opera && 'opera') ||
 				($.aikaApi.browser.webkit && 'webkit') || 'msie';
 
 			this.magicBox = $("<div></div>");
-			this.magicBox.addClass(this._uq("magic-box"));
-			this.magicBox.addClass(this._uq(browser));
+			this.magicBox.addClass(this.uq("magic-box"));
+			this.magicBox.addClass(this.uq(browser));
 			this.magicBox.addClass(this.style);
 
 			this.outerWrap = $("<div></div>").appendTo(this.magicBox);
-			this.outerWrap.addClass(this._uq('outer-wrap'));
+			this.outerWrap.addClass(this.uq('outer-wrap'));
 			this.innerWrap = $("<div></div>").appendTo(this.outerWrap);
-			this.innerWrap.addClass(this._uq('inner-wrap'));
+			this.innerWrap.addClass(this.uq('inner-wrap'));
 
 			//var screen = $("<div class='onp-sl-screen onp-sl-screen-default'></div>").appendTo(this.innerWrap);
 			//this.screens['default'] = this.defaultScreen = screen;
 
 			$.aikaApi.isTouch()
-				? this.magicBox.addClass(this._uq("touch"))
-				: this.magicBox.addClass(this._uq("no-touch"));
+				? this.magicBox.addClass(this.uq("touch"))
+				: this.magicBox.addClass(this.uq("no-touch"));
 
 			if( this.options.cssClass ) {
 				this.magicBox.addClass(this.options.cssClass);
@@ -312,7 +312,7 @@
 				// then set the locker position to "absolute" and postion to "0px 0px 0px 0px".
 			} else {
 
-				element.addClass(this._uq("overlap-mode"));
+				element.addClass(this.uq("overlap-mode"));
 
 				var displayProp = this.element.css("display");
 
@@ -324,7 +324,7 @@
 					( displayProp !== "block" && displayProp !== "inline-block" ) ) {
 
 					$containerToTrackSize = $('<div></div>');
-					$containerToTrackSize.addClass(this._uq("content-wrap"));
+					$containerToTrackSize.addClass(this.uq("content-wrap"));
 					$containerToTrackSize.insertAfter(element);
 					$containerToTrackSize.append(element);
 
@@ -343,7 +343,7 @@
 				// creating another content which will be blurred
 				if( this.overlap === 'blurring' ) {
 					this.blurArea = $("<div></div>");
-					this.blurArea.addClass(this._uq("blur-area"));
+					this.blurArea.addClass(this.uq("blur-area"));
 					this.blurArea.insertAfter(element);
 					this.blurArea.append(element);
 					element = this.blurArea;
@@ -383,19 +383,19 @@
 
 				// creating other markup for the overlap
 				this.overlapMagicBox = $("<div></div>");//.hide();
-				this.overlapMagicBox.addClass(this._uq('overlap-magic-box'));
-				this.overlapMagicBox.addClass(this._uq('position-' + this.options.overlap.position));
+				this.overlapMagicBox.addClass(this.uq('overlap-magic-box'));
+				this.overlapMagicBox.addClass(this.uq('position-' + this.options.overlap.position));
 				this.overlapMagicBox.append(this.magicBox);
 
 				this.overlapBox = $("<div></div>");
-				this.overlapBox.addClass(this._uq('overlap-box'));
+				this.overlapBox.addClass(this.uq('overlap-box'));
 				this.overlapBox.append(this.overlapMagicBox);
 
-				this.overlapBox.addClass(this._uq(this.overlap + "-mode"));
+				this.overlapBox.addClass(this.uq(this.overlap + "-mode"));
 				this.overlapBox.addClass(this.style + "-theme");
 
 				var $overlapBackground = $("<div></div>");
-				$overlapBackground.addClass(this._uq('overlap-background'));
+				$overlapBackground.addClass(this.uq('overlap-background'));
 				this.overlapBox.append($overlapBackground);
 
 				$containerToTrackSize.append(this.overlapBox);

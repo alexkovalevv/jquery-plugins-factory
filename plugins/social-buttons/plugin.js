@@ -9,228 +9,134 @@
 	'use strict';
 
 	$.aikaCore.registerPlugin('aikaSocialButtons', {
+		pluginName: 'social-buttons',
 
-		_pluginName: 'social-buttons',
-
-		_defaults: {
+		defaults: {
+			// Положение шаблона вертикально(vertical) или горизонтально(horizontal)
+			layout: 'horizontal',
+			// Выравнивание кнопок
+			align: 'left',
 			// Сортировка кнопок
-			order: [
-				'tumblr-share',
-				'google-share',
-				'twitter-tweet',
-				'facebook-share',
-				'vkontakte-share',
-				'odnoklassniki-share',
-				'mail-share',
-				'linkedin-share',
-				'pinterest-share'
-			],
-
-			buttons: {
-				theme: 'cozy',
-				effect: 'push',
-				size: 'small',
-				counter: true,
-				counterType: 'vertical',
-				align: 'left',
-				facebook: {
-					share: {
-						title: 'share',
-						url: 'https://google.com'
-					}
-				},
-				twitter: {
-					tweet: {
-						title: 'tweet',
-						url: 'https://google.com'
-					}
-				},
-				google: {
-					share: {
-						title: '+plus',
-						url: 'https://google.com'
-					}
-				},
-				vkontakte: {
-					share: {
-						title: 'share',
-						url: 'http://google.com'
-					}
-				},
-				odnoklassniki: {
-					share: {
-						title: 'share',
-						url: 'https://google.com'
-					}
-				},
-				mail: {
-					share: {
-						title: 'share',
-						url: 'https://google.com'
-					}
-				},
-				linkedin: {
-					share: {
-						title: 'share',
-						url: 'https://google.com'
-					}
-				},
-				pinterest: {
-					share: {
-						title: 'share',
-						url: 'https://google.com'
-					}
-				},
-				tumblr: {
-					share: {
-						title: 'share',
-						url: 'https://google.com'
-					}
-				}
-			}
+			order: ['facebook-share'],
+			// Стиль кнопок
+			style: {
+				theme: 'default',
+				layout: 'horizontal'
+			},
+			// Эффект кнопок
+			effect: 'push',
+			// Размер кнопок
+			size: 'small',
+			// Счетчики
+			counters: true
 		},
 
-		_create: function() {
-			this._prefix = this._uq('sbtns', '-');
-			console.log('init social buttons component');
-			return this.render();
+		create: function() {
+			this.prefix = this.uq('sbtns', '-');
+			this._render();
 		},
 
-		render: function() {
-			var self = this;
+		prepareOptions: function() {
+			/// вызываем родительский метод
+			this.superclass.prepareOptions.call(this);
 
-			if( !this.options.order.length ) {
-				return;
-			}
+			this._layout = this.options.layout || this._default['layout'];
+			this._align = this.options.align || this._default['align'];
+			this._size = this.options.size || this._default['size'];
+			this._effect = this.options.effect || this._default['effect'];
+			this._order = this.options.order || this._default['order'];
 
-			var buttonContanier = this._uq('contanier'),
-				themeVars = {
-					classes: buttonContanier + ' ' + this._uq(this.options.buttons.theme + '-contanier')
-				},
-				contanierTemplate = this._getButtonsContanierTemplate();
+			this._buttons = this.getPluginObjects('buttons');
+		},
 
-			// Устанавливаем выравнивание кнопок
-			if( this.options.buttons.align ) {
-				if( !$.aikaApi.tools.inArray(this.options.buttons.align, ['left', 'center', 'right']) ) {
-					this._showWarning('Выбранная вами тема не поддерживает "' + this.options.buttons.align + '" выравнивание кнопок."' + this.options.buttons.theme + '".', '_render')
-					this.options.buttons.align = this._defaults.buttons.align;
-				}
-				themeVars['classes'] += ' ' + this._uq('align-' + this.options.buttons.align);
-			}
+		_render: function() {
+			this._createTemplate();
+			this._renderButtons();
+		},
 
-			// Получаем настройки выбранного шаблона
-			var buttonsTemplateConfig = this._getThemeConfig();
+		_createTemplate: function() {
+			this.addClass(this.element, [
+				'plugin',
+				this._layout,
+				this._align,
+				this._size,
+				this._effect
+			]);
+		},
 
-			// Проверяем размер кнопок установленных пользователем и разрешенный размеры в шаблоне
-			// Если пользовательский размер кнопок доступен в шаблоне, печатаем настройки этого размера
-			if( buttonsTemplateConfig.size && buttonsTemplateConfig.size.length ) {
-				if( !$.aikaApi.tools.inArray(this.options.buttons.size, buttonsTemplateConfig.size) ) {
-					this._showWarning('Выбранная вами тема не поддерживает "' + this.options.buttons.size + '" размер кнопок."' + this.options.buttons.theme + '".', '_render');
-					this.options.buttons.size = this._defaults.buttons.size;
-				}
-
-				themeVars['size'] = this.options.buttons.size;
-				themeVars['classes'] += ' ' + this._uq(this.options.buttons.theme + '-' + this.options.buttons.size);
-			}
-
-			// Если в настройках есть разрешение для счетчика и пользователь активировал счетчик,
-			// показваем счетчик у кнопок
-			if( buttonsTemplateConfig.isCounter && this.options.buttons.counter ) {
-				themeVars['classes'] += ' ' + this._uq(this.options.buttons.theme + '-counter-available');
-
-				if( !$.aikaApi.tools.inArray(this.options.buttons.counterType, buttonsTemplateConfig.counterType) ) {
-					this._showWarning('Выбранная вами тема не поддерживает "' + this.options.buttons.counterType + '" тип счетчика.', '_render');
-					this.options.buttons.counterType = this._defaults.buttons.counterType;
+		_renderButtons: function() {
+			for( var i in this._order ) {
+				if( !this._order.hasOwnProperty(i) ) {
+					continue;
 				}
 
-				themeVars['classes'] += ' ' + this._uq(this.options.buttons.theme + '-counter-' + this.options.buttons.counterType);
-			}
+				var buttonName = this._order[i];
 
-			this.element.append($.aikaApi.tools.createSkin(contanierTemplate, themeVars));
-			this._loadButtons = {};
+				if( !this._buttons[buttonName] ) {
+					this.showCriticalError('Кнопка {' + buttonName + '} не зарегистрирована. Пожалуйста, проверьте конфигурацию плагина.');
+				}
 
-			$.map(this.options.order, function(buttonName) {
-				var button = self._createButton(buttonName);
+				var parts = buttonName.split('-'),
+					networkName = parts.length === 2 ? parts[0] : null,
+					buttonType = parts.length === 2 ? parts[1] : null;
 
-				button.getState().always(function(counterNumber) {
+				var buttonOptions = $.extend(true, {}, this.options);
+
+				if( this.options[networkName] && this.options[networkName][buttonType] ) {
+					buttonOptions = $.extend(true, buttonOptions, this.options[networkName][buttonType]);
+				}
+
+				this._buttons[buttonName].prefix = this.prefix;
+				this._buttons[buttonName].network = networkName;
+
+				this._buttons[buttonName].init(buttonOptions);
+
+				this._buttons[buttonName].getState().always(function(counterNumber) {
+					console.log(counterNumber);
 					if( !counterNumber ) {
 						counterNumber = 0;
 					}
-					counterNumber = parseInt(counterNumber);
-					self.totalCounter = self.totalCounter + counterNumber;
-
-					self._loadButtons[buttonName] = button.render();
 				});
-			});
 
-			var timer = setInterval(function() {
-				if( Object.keys(self._loadButtons).length === self.options.order.length ) {
-					for( var i in self.options.order ) {
-						if( !self._loadButtons.hasOwnProperty(self.options.order[i]) ) {
-							continue;
-						}
-						$('.' + buttonContanier, self.element)
-							.append(self._loadButtons[self.options.order[i]]);
+				this._buttons[buttonName].render(this.element);
 
-						self.runHook('button-after-create', [self.options.order[i]]);
-					}
+				/*$.map(this.options.order, function(buttonName) {
+				 var button = self._createButton(buttonName);
 
-					self._createButtonTotalCounter();
+				 button.getState().always(function(counterNumber) {
+				 if( !counterNumber ) {
+				 counterNumber = 0;
+				 }
+				 counterNumber = parseInt(counterNumber);
+				 //self.totalCounter = self.totalCounter + counterNumber;
 
-					clearInterval(timer);
-				}
-			}, 50);
+				 self._loadButtons[buttonName] = button.render();
+				 });
+				 };*/
 
-			return this.element;
-		},
+				/*var buttons = '';
+				 var timer = setInterval(function() {
+				 if( Object.keys(self._loadButtons).length === self.options.order.length ) {
+				 for( var i in self.options.order ) {
+				 if( !self._loadButtons.hasOwnProperty(self.options.order[i]) ) {
+				 continue;
+				 }
+				 //$('.' + buttonContanier, self.element)
+				 //.append(self._loadButtons[self.options.order[i]]);
+				 buttons += self._loadButtons[self.options.order[i]];
 
-		_createButton: function(name) {
-			if( !$.aikaPluginSocialButtons.buttons[name] ) {
-				this._showCriticalError('Кнопка с именем ' + name + ' не существует.', '_createButton');
+				 self.runHook('button-after-create', [self.options.order[i]]);
+				 }
+
+				 //self._createButtonTotalCounter();
+
+				 clearInterval(timer);
+				 }
+				 }, 50);*/
 			}
-
-			this.runHook('button-before-create', [name]);
-
-			var parts = name.split('-'),
-				networkName = parts.length === 2 ? parts[0] : null,
-				buttonType = parts.length === 2 ? parts[1] : null;
-
-			var button = $.aikaApi.tools.extend($.aikaPluginSocialButtons.buttons[name]);
-			button.init(this.options.buttons[networkName][buttonType], this);
-
-			return button;
 		},
 
-		_createButtonTotalCounter: function() {
-			var buttonContanier = $('.' + this._uq('contanier'), this.element),
-				childTag = buttonContanier.children().prop("tagName");
-
-			buttonContanier.append(
-				'<' + childTag + ' class="' + this._uq('total-counter') + '">'
-				+ this._convertLongNumbers(this.totalCounter) + '<span>shares</span>' +
-				'</' + childTag + '>'
-			);
-		},
-
-		_getThemeConfig: function() {
-			return $.aikaPluginSocialButtons.themes[this.options.buttons.theme].config
-				? $.aikaPluginSocialButtons.themes[this.options.buttons.theme].config
-				: {};
-		},
-
-		_getTheme: function() {
-			return $.aikaPluginSocialButtons.themes[this.options.buttons.theme].button
-				? $.aikaPluginSocialButtons.themes[this.options.buttons.theme].button()
-				: false;
-		},
-
-		_getButtonsContanierTemplate: function() {
-			return $.aikaPluginSocialButtons.themes[this.options.buttons.theme].contanier
-				? $.aikaPluginSocialButtons.themes[this.options.buttons.theme].contanier()
-				: false;
-		},
-
-		_showWarning: function(message, sender, showForce) {
+		showWarning: function(message, sender, showForce) {
 			if( !message || message == '' ) {
 				return;
 			}
@@ -241,45 +147,31 @@
 
 			this.runHook('warning-error', [message, sender]);
 
-			var errorContanier = this.element.find('.' + this._uq('plugin-warning-error'));
+			var errorContanier = this.element.find('.' + this.uq('plugin-warning-error'));
 			if( errorContanier.length ) {
 				errorContanier.html(errorContanier.html() + '<br><b>Внимание!</b> ' + message);
 			} else {
-				this.element.prepend('<div class="' + this._uq('plugin-warning-error') + '"><b>Внимание!</b> ' + message + '</div>');
+				this.element.prepend('<div class="' + this.uq('plugin-warning-error') + '"><b>Внимание!</b> ' + message + '</div>');
 			}
 		},
 
-		_showCriticalError: function(message, sender) {
+		showCriticalError: function(message, sender) {
 			if( !message || message == '' ) {
 				return;
 			}
 
 			this.runHook('critical-error', [message, sender]);
 
-			var errorContanier = this.element.find('.' + this._uq('plugin-critical-error'));
+			var errorContanier = this.element.find('.' + this.uq('plugin-critical-error'));
 			if( errorContanier.length ) {
 				errorContanier.html(errorContanier.html() + '<br>' + message);
 			} else {
-				this.element.prepend('<div class="' + this._uq('plugin-critical-error') + '"><b>Ошибка!</b> ' + message + '</div>');
+				this.element.prepend('<div class="' + this.uq('plugin-critical-error') + '"><b>Ошибка!</b> ' + message + '</div>');
 			}
 
 			throw new Error(message);
 		},
-		/**
-		 * Преобразует длинное число счетчика в короткое
-		 * @param n
-		 * @returns string
-		 */
-		_convertLongNumbers: function(n) {
-			if( n < 1000 ) {
-				return n;
-			}
 
-			n = n / 1000;
-			n = Math.round(n * 10) / 10
-
-			return n + "k";
-		},
 		/**
 		 * Получает скрипт счетчика c помощью функции getJSON
 		 * @param callback

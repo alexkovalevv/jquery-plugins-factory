@@ -12,10 +12,6 @@
 		$.aikaApi = {};
 	}
 
-	if( !$.aikaPluginAbstract ) {
-		$.aikaPluginAbstract = {};
-	}
-
 	if( !$.aikaApi.lang ) {
 		$.aikaApi.lang = {};
 	}

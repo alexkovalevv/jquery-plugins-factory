@@ -86,7 +86,7 @@
 		}
 	});
 
-	$(document).ready(function() {
-		$('.content').aikaLocker();
-	});
+	/*$(document).ready(function() {
+	 $('.content').aikaLocker();
+	 });*/
 })(jQuery);

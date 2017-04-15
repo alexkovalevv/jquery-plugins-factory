@@ -25,7 +25,7 @@
 
 			$(this.element).aikaMagicBox({
 				id: self.pluginId,
-				useInjections: ['socialbuttons', 'custom-forms'],
+				//useInjections: ['socialbuttons', 'custom-forms'],
 				content: buttonsContanier
 			});
 
