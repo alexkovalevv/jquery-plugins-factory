@@ -6,16 +6,25 @@
 	socialButton.init = function(options) {
 
 		this.options = $.extend(true, this._defaults, options);
+		this.lang = 'ru_RU';
+		this.buttonType = this.options.buttonType || 'custom';
+		this.layout = this.options.style.layout || 'horizontal';
 
-		this.counter = this.options.counter || this.options.counters;
 		this.availableCounter = true;
-		this.effect = this.options.effect;
+		this.counter = this.options.counter || this.options.counters;
 
+		if( this.options.style.layout && this.options.style.layout == 'vertical' ) {
+			this.counter = true;
+		}
+
+		if( !this.availableCounter ) {
+			this.counter = false;
+		}
+
+		this.effect = this.options.effect;
 		this.url = this._extractUrl();
 		this.title = this.options.title || this._defaults.title;
-
 		this.counterNumber = 0;
-
 		this.urlHash = $.aikaApi.tools.hash(this.url);
 		this.counterCacheName = this.uq('cache-counter') + '-' + this.urlHash;
 
@@ -23,6 +32,10 @@
 
 		if( this.prepareOptions ) {
 			this.prepareOptions();
+		}
+
+		if( this.buttonType == 'iframe' ) {
+			return;
 		}
 
 		if( this.counter && this.availableCounter && !this.getCache() ) {
@@ -37,31 +50,152 @@
 		this._deferred.resolve();
 	};
 
-	socialButton.getTemplate = function() {
+	/**
+	 * Функция обратного вызова, которая будет вызвана после
+	 * срабатывания одного из событий iframe кнопки
+	 * @param data object названия событий, коды ошибок, различные уведомления.
+	 */
+	socialButton.iframeButtonCallback = function(data) {
+		// код который нужно выполнить в результате действия кнопки
+	};
+
+	/**
+	 * Публикует кнопку в заранее переданный контейнер
+	 * @param $holder object контейнер
+	 */
+	socialButton.renderButton = function($holder) {
+		this.renderCustomButton($holder);
+	};
+
+	/**
+	 * Публикует произвольную кнопку в заранее переданный контейнер
+	 * В отличии от iframe кнопки, она имеет свою разметку и все ресурсы используются локально
+	 * @param $holder object контейнер
+	 */
+	socialButton.renderCustomButton = function($holder) {
 		var button = $('<a href="#"></a>');
 		button.data('buttons-name', this.name);
 		this.addClass(button, ['btn']);
 
 		var bage = $('<span class="' + this.uq('btn-bage') + '">' +
-		'<span class="' + this.uq('btn-icon') + '"></span>' +
+		'<span class="' + this.uq('btn-icon') + '">' + this.getIcon() + '</span>' +
 		'<span class="' + this.uq('btn-title') + '">' + this.title + '</span>' +
 		'</span>');
 		button.append(bage);
 
-		var counter = $('<span class="' + this.uq('btn-counter') + '">' + this.counterNumber + '</span>');
-		button.append(counter);
+		if( this.counter ) {
+			var counter = $('<span class="' + this.uq('btn-counter') + '">' + this.counterNumber + '</span>');
+			button.append(counter);
+		}
 
-		return button;
+		$holder.append(button);
 	};
 
 	/**
-	 * Оборачивает iframe кнопку в нужный шаблон и передает обратно
-	 * @param $holder iframe кнопка
+	 * Создает разметку кнопки и публикует ее в переданный контейнер.
+	 * @param $holder object контейнер
 	 */
-	socialButton.getIframeButtonTemplate = function($holder) {
-		return $holder;
+	socialButton.create = function($holder) {
+		this.wrap = $('<div></div>').appendTo($holder);
+		this.innerWrap = $('<div></div>').appendTo(this.wrap);
+		this.addClass(this.wrap, [
+			'control',
+			'control-' + this.network,
+			'control-' + this.name,
+			'btn-type-' + this.buttonType
+		]);
+
+		if( this.counter ) {
+			this.addClass(this.wrap, 'counter-on');
+		} else {
+			this.addClass(this.wrap, 'counter-off');
+		}
+
+		this.addClass(this.innerWrap, 'control-inner-wrap');
+		this.renderButton(this.innerWrap);
 	};
 
+	// ----------------------------------------------------------------
+	// Методы для работа со статусом загрузки кнопок
+	// ----------------------------------------------------------------
+
+	/**
+	 * Установливает статус, что кнопка загружена
+	 */
+	socialButton.setLoadingState = function() {
+		var self = this;
+		if( this.isLoading() ) {
+			return;
+		}
+
+		this.innerWrap.fadeIn(150, function() {
+			self.addClass(self.wrap, 'button-loaded');
+		});
+
+		this._isLoadingState = true;
+	};
+
+	/**
+	 * Удаляет статус, что кнопка загружена
+	 */
+	socialButton.removeLoadingState = function() {
+		this.removeClass(this.wrap, 'button-loaded');
+		this._isLoadingState = false;
+	};
+
+	/**
+	 * Проверяет, загружена ли кнопка.
+	 */
+	socialButton.isLoading = function() {
+		return this._isLoadingState;
+	};
+
+	// ----------------------------------------------------------------
+	// Методы для работы со счетчиками
+	// ----------------------------------------------------------------
+
+	/**
+	 * Получает состояние загрузки кнопки
+	 * @returns {*}
+	 */
+	socialButton.getState = function() {
+		return this._deferred.promise();
+	};
+
+	/**
+	 * Запускает процес получения счетчика из соц. сетей
+	 * @returns {*}
+	 */
+	socialButton.getCounter = function() {
+		var self = this;
+		if( this.counterInit ) {
+			this.counterInit();
+		}
+
+		return this._deferred.done(function(number) {
+			self.counterNumber = number;
+			self.setCache(number);
+		});
+	};
+
+	/**
+	 * Обновляет счетчик
+	 * @param counterNumber
+	 * @returns {boolean}
+	 */
+	socialButton.updateCounter = function(counterNumber) {
+		if( !this.wrap || !this.wrap.length ) {
+			return false;
+		}
+		this.wrap.find('.' + this.uq('btn-counter')).text(counterNumber);
+		return true;
+	};
+
+	/**
+	 * Получает закешированные счетчики
+	 * @param all boolean если нужно получать все счетчики, нужно использовать true
+	 * @returns {*}
+	 */
 	socialButton.getCache = function(all) {
 		var counterCache = $.aikaApi.tools.getFromStorage(this.counterCacheName);
 
@@ -80,6 +214,11 @@
 		return null;
 	};
 
+	/**
+	 * Кеширует счетчики на 1 день
+	 * @param number int число, которое нужно закешировать
+	 * @returns {boolean}
+	 */
 	socialButton.setCache = function(number) {
 		var self = this,
 			getCounters;
@@ -100,45 +239,6 @@
 		$.aikaApi.tools.setStorage(self.counterCacheName, storageData, 1);
 
 		return true;
-	};
-
-	socialButton.render = function($holder) {
-		this.wrap = $('<div></div>');
-		this.addClass(this.wrap, ['control', 'control-' + this.name, 'network-' + this.network]);
-		this.wrap.append(this.getTemplate());
-		$holder.append(this.wrap);
-	};
-
-	socialButton.getState = function() {
-		return this._deferred.promise();
-	};
-
-	socialButton.getCounter = function() {
-		var self = this;
-		if( this.counterInit ) {
-			this.counterInit();
-		}
-
-		return this._deferred.done(function(number) {
-			self.counterNumber = number;
-			self.setCache(number);
-		});
-	};
-
-	/**
-	 * Преобразует длинное число счетчика в короткое
-	 * @param n
-	 * @returns string
-	 */
-	socialButton.convertLongNumbers = function(n) {
-		if( n < 1000 ) {
-			return n;
-		}
-
-		n = n / 1000;
-		n = Math.round(n * 10) / 10;
-
-		return n + "k";
 	};
 
 	/**
@@ -171,11 +271,35 @@
 	 * @returns void
 	 */
 	socialButton.getShareCounterScripts = function(callback) {
+		console.log(this.makeUrl(this.options.counterUrl, {
+			url: this.url,
+			index: this.idx
+		}));
 		$.getScript(this.makeUrl(this.options.counterUrl, {
 			url: this.url,
 			index: this.idx
 		}), callback ? callback : function() {
 		}).fail(this._deferred.reject);
+	};
+
+	// ----------------------------------------------------------------
+	// Вспомогательные методы
+	// ----------------------------------------------------------------
+
+	/**
+	 * Преобразует длинное число счетчика в короткое
+	 * @param n
+	 * @returns string
+	 */
+	socialButton.convertLongNumbers = function(n) {
+		if( n < 1000 ) {
+			return n;
+		}
+
+		n = n / 1000;
+		n = Math.round(n * 10) / 10;
+
+		return n + "k";
 	};
 
 	/**

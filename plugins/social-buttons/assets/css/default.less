@@ -1,0 +1,38 @@
+/**
+ * Стили кнопок по умолчанию
+ * @author Alex Kovalev <alex.kovalevv@gmail.com> 
+ * @copyright Alex Kovalev 16.04.2017 
+ */
+
+.aika-sbtns-plugin {
+  box-sizing: border-box;
+
+  .aika-sbtns-control {
+    display: inline-block;
+    vertical-align: middle;
+    background: url(../img/button-loader-ffffff.gif) center no-repeat;
+
+    .aika-sbtns-control-inner-wrap {
+      display: none;
+    }
+
+    &.aika-sbtns-button-loaded {
+      background: none;
+      .aika-sbtns-control-inner-wrap {
+        display: inline-block;
+      }
+    }
+
+    &.aika-sbtns-counter-on {
+      .aika-sbtns-btn-counter {
+        display: inline-block;
+      }
+    }
+
+    &.aika-sbtns-counter-off {
+      .aika-sbtns-btn-counter {
+        display: none;
+      }
+    }
+  }
+}

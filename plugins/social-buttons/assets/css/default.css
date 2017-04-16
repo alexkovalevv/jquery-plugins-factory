@@ -1,167 +1,28 @@
-/* RESET STYLES */
-*, html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, label, fieldset, input, p, blockquote, th, td {
-    margin: 0;
-    padding: 0
+/**
+ * Стили кнопок по умолчанию
+ * @author Alex Kovalev <alex.kovalevv@gmail.com> 
+ * @copyright Alex Kovalev 16.04.2017 
+ */
+.aika-sbtns-plugin {
+  box-sizing: border-box;
 }
-
-table {
-    border-collapse: collapse;
-    border-spacing: 0
+.aika-sbtns-plugin .aika-sbtns-control {
+  display: inline-block;
+  vertical-align: middle;
+  background: url(../img/button-loader-ffffff.gif) center no-repeat;
 }
-
-fieldset, img {
-    border: 0
+.aika-sbtns-plugin .aika-sbtns-control .aika-sbtns-control-inner-wrap {
+  display: none;
 }
-
-address, caption, cite, code, dfn, em, strong, th, var {
-    font-style: normal;
-    font-weight: normal
+.aika-sbtns-plugin .aika-sbtns-control.aika-sbtns-button-loaded {
+  background: none;
 }
-
-ol, ul, li {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+.aika-sbtns-plugin .aika-sbtns-control.aika-sbtns-button-loaded .aika-sbtns-control-inner-wrap {
+  display: inline-block;
 }
-
-caption, th {
-    text-align: left
+.aika-sbtns-plugin .aika-sbtns-control.aika-sbtns-counter-on .aika-sbtns-btn-counter {
+  display: inline-block;
 }
-
-h1, h2, h3, h4, h5, h6 {
-    font-weight: normal;
-    padding-bottom: 10px;
-}
-
-q:before, q:after {
-    content: ''
-}
-
-strong {
-    font-weight: bold
-}
-
-em {
-    font-style: italic
-}
-
-.italic {
-    font-style: italic
-}
-
-.aligncenter {
-    display: block;
-    margin: 0 auto;
-}
-
-.alignleft {
-    float: left;
-    margin: 10px;
-}
-
-.alignright {
-    float: right;
-    margin: 10px;
-}
-
-.no-margin {
-    margin: 0px;
-}
-
-.no-bottom {
-    margin-bottom: 0px;
-}
-
-.no-padding {
-    padding: 0px;
-}
-
-.margin-t {
-    margin-top: 25px;
-}
-
-div {
-    position: relative
-}
-
-a {
-    text-decoration: none;
-    color: #0073B2;
-}
-
-a:hover {
-    text-decoration: none;
-}
-
-a, a:link, a:hover, a:active, a:focus {
-    outline: none;
-}
-
-div, img {
-    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-    -moz-box-sizing: border-box; /* Firefox, other Gecko */
-    box-sizing: border-box; /* Opera/IE 8+ */
-}
-
-body {
-    /*background: #e7e8e2;*/
-}
-
-.onp-wgt-sbtns-contanier {
-    /*padding: 20px 10px;*/
-    padding: 10px;
-    text-align: left;
-}
-
-/*.aika-fire-sbtns-contanier li {
-    display: inline-block;
-    list-style: none;
-}*/
-
-.onp-wgt-sbtns-btn-hidden {
-    display: none !important;
-}
-
-.onp-wgt-sbtns-align-left {
-    text-align: left;
-}
-
-.onp-wgt-sbtns-align-right {
-    text-align: right;
-}
-
-.onp-wgt-sbtns-align-center {
-    text-align: center;
-}
-
-.onp-wgt-sbtns-plugin-warning-error, .onp-wgt-plugin-critical-error {
-    display: inline-block;
-    padding: 4px 10px;
-    margin: 0 10px;
-    font-family: Helvetica, Arial, sans-serif;
-    font-size: 14px;
-}
-
-.onp-wgt-sbtns-plugin-warning-error {
-    background: #f28d00;
-    color: #ffffff;
-}
-
-.onp-wgt-sbtns-plugin-critical-error {
-    background: #f2424f;
-    color: #ffffff;
-}
-
-.onp-wgt-sbtns-total-counter {
-    font-family: "Segoe UI", Arial, sans-serif;
-    font-size: 22px;
-    line-break: normal;
-    vertical-align: middle;
-    text-transform: uppercase;
-}
-
-.onp-wgt-sbtns-total-counter > span {
-    display: block;
-    font-size: 10px;
-    text-align: center;
+.aika-sbtns-plugin .aika-sbtns-control.aika-sbtns-counter-off .aika-sbtns-btn-counter {
+  display: none;
 }

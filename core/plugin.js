@@ -13,7 +13,7 @@
 
 		options: {},
 
-		prefix: 'onp-wgt',
+		prefix: 'aika',
 
 		defaults: {
 			appPublic: false,

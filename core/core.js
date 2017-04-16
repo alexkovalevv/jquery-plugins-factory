@@ -230,11 +230,26 @@
 			 * @returns {*}
 			 * @private
 			 */
-			_extendPluginClass: function(pluginName, className) {
-				if( !_pluginClasses[pluginName] || !_pluginClasses[pluginName][className] ) {
-					throw new Error('Класс ' + className + ' не зарегистрирован.');
+			_extendPluginClass: function(pluginName, classNames) {
+
+				if( !$.isArray(classNames) ) {
+					var className = classNames;
+					classNames = [];
+					classNames.push(className);
 				}
-				return $.aikaApi.tools.extend(_pluginClasses[pluginName][className]);
+
+				var extendClass = {};
+
+				for( var i = 0; i < classNames.length; i++ ) {
+
+					if( !_pluginClasses[pluginName] || !_pluginClasses[pluginName][classNames[i]] ) {
+						throw new Error('Класс ' + classNames[i] + ' не зарегистрирован.');
+					}
+
+					extendClass = $.extend(true, extendClass, $.aikaApi.tools.extend(_pluginClasses[pluginName][classNames[i]]));
+				}
+
+				return extendClass;
 			},
 
 			_getPlugin: function(pluginName) {
@@ -284,6 +299,13 @@
 							return;
 						}
 						element.addClass(this.uq(classes));
+					},
+					removeClass: function(element, className) {
+						if( element.hasClass(className) ) {
+							element.removeClass(this.uq(className));
+							return true;
+						}
+						return false;
 					},
 					addHook: function(eventName, callback, priority, global) {
 						pluginId = pluginId || this.id;

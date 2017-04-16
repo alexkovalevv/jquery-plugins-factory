@@ -8,26 +8,55 @@
 (function($) {
 	'use strict';
 
-	if( !$.aikaPluginSocialButtons.vkShare ) {
-		$.aikaPluginSocialButtons.vkShare = {};
+	if( !window.__onp_wdgt_vk_share_couter_callbacks ) {
+		window.__onp_wdgt_vk_share_couter_callbacks = {};
 	}
-	$.aikaPluginSocialButtons.vkShare.idx = 100;
 
-	var button = $.aikaApi.tools.extend($.aikaPluginSocialButtons.control);
+	var button = $.aikaCore.extendPluginClass('aikaSocialButtons', ['control', 'iframe-buttons-loader']);
 
-	button.name = 'vkontakte-share';
+	button.name = 'vk-share';
 
 	button._defaults = {
+		// Заголовок кнопки (только для шкафчиков или произвольных кнопок)
+		title: 'Поделиться',
+		// Тип кнопки (iframe, custom)
+		// по умолчанию iframe
+		buttonType: 'iframe',
+		// Заголовок записи на стене
+		pageTitle: null,
+		// Описание записи на стене
+		pageDescription: null,
+		// Url записи на стене
+		pageUrl: null,
+		// Изображение записи на стене
+		pageImage: null,
+		// Ширина всплывающего окна
 		popupWidth: 655,
+		// Высота всплывающего окна
 		popupHeight: 450,
-		title: 'share',
-		popupUrl: 'https://vk.com/share.php?url={url}&title={title}',
+		// Url всплывающего окна
+		popupUrl: '//vk.com/share.php?url={url}&title={title}',
+		// Url для получения счетчика
 		counterUrl: '//vk.com/share.php?act=count&url={url}&index={index}'
 	};
 
+	// Вконтакте не любит киррилические домены, поэтому мы преобразуем url перед тем, как его использовать.
+	button._extractUrl = function() {
+		var URL = this.options.url || window.location.href;
+
+		if( $.aikaApi.tools.checkDomainType(URL) == 'cyrillic' ) {
+			var arrUrlParts = URL.split("/");
+			URL = arrUrlParts[0] + '//' + $.aikaApi.punycode.toASCII($.aikaApi.tools.normalizecyrillicDomain(arrUrlParts[2]));
+		}
+		return $.aikaApi.tools.URL.normalize(URL);
+	};
+
 	button.prepareOptions = function() {
-		$.aikaPluginSocialButtons.vkShare.idx++;
-		this.idx = $.aikaPluginSocialButtons.vkShare.idx;
+		this.idx = parseInt(this.idx) + 100;
+
+		if( $.aikaApi.tools.checkDomainType(this.url) == 'punycode' ) {
+			this.counter = false;
+		}
 	};
 
 	button.counterInit = function() {
@@ -81,7 +110,7 @@
 		}
 
 		if( window.VK.Share.count ) {
-			$.aikaPluginSocialButtons.vkShare.oldShareCallback = window.VK.Share.count;
+			window.__onp_wdgt_vk_share_couter_callbacks[this.idx] = window.VK.Share.count;
 		}
 
 		window.VK.Share.count = self.getCounterByVkMethod;
@@ -98,9 +127,7 @@
 		if( idx > 100 ) {
 			$(document).trigger($.aikaApi.tools.hash('vk-counter-ready-' + idx), [idx, number]);
 		} else {
-			if( $.aikaPluginSocialButtons.vkShare.oldShareCallback ) {
-				$.aikaPluginSocialButtons.vkShare.oldShareCallback(idx, number);
-			}
+			window.__onp_wdgt_vk_share_couter_callbacks[this.idx] && window.__onp_wdgt_vk_share_couter_callbacks[this.idx](idx, number);
 		}
 	};
 
@@ -111,6 +138,32 @@
 
 	};
 
-	$.aikaPluginSocialButtons.buttons["vkontakte-share"] = button;
+	/***
+	 * Создает кнопку, счетчик и контейнеры
+	 * @param $holder
+	 */
+	button.renderButton = function($holder) {
+
+		if( this.buttonType !== 'iframe' ) {
+			this.renderCustomButton($holder);
+			return;
+		}
+
+		this.button = $("<div></div>").appendTo($holder);
+		this.button.attr('id', this.uq(this.name + '-' + 'widget-id') + Math.floor((Math.random() * 999999) + 1));
+
+		this.createIframeButton(this.button, button.name, {
+			pageTitle: this.options.pageTitle,
+			pageDescription: this.options.pageDescription,
+			pageUrl: this.url,
+			pageImage: this.options.pageImage,
+			pageId: this.options.pageId,
+			layout: this.layout,
+			counter: this.counter,
+			lang: this.lang
+		});
+	};
+
+	$.aikaCore.addPluginObject('aikaSocialButtons', 'buttons', button.name, button);
 
 })(jQuery);

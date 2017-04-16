@@ -1,5 +1,5 @@
 /**
- * Кнопка одноклассники поделиться
+ * Кнопка мой мир поделиться
  * @author Alex Kovalev <alex.kovalevv@gmail.com>
  * @copyright Alex Kovalev 01.11.2016
  * @version 1.0
@@ -8,20 +8,37 @@
 (function($) {
 	'use strict';
 
-	var button = $.aikaApi.tools.extend($.aikaPluginSocialButtons.control);
+	var button = $.aikaCore.extendPluginClass('aikaSocialButtons', ['control', 'iframe-buttons-loader']);
 
 	button.name = 'mail-share';
 
 	button._defaults = {
+		// Заголовок кнопки (только для шкафчиков или произвольных кнопок)
+		title: 'Поделиться',
+		// Заголовок записи на стене
+		pageTitle: null,
+		// Описание записи на стене
+		description: null,
+		// Url записи на стене
+		url: null,
+		// Изображение записи на стене
+		image: null,
+		// Url всплывающего окна
 		counterUrl: '//connect.mail.ru/share_count?url_list={url}&callback=1&func=?',
+		// Url для получения счетчика
 		popupUrl: 'https://connect.mail.ru/share?share_url={url}&title={title}&description={description}&image_url={image}',
+		// Ширина всплывающего окна
 		popupWidth: 492,
+		// Высота всплывающего окна
 		popupHeight: 500
 	};
 
 	button.convertNumber = function(data) {
+		console.log(data);
 		for( var url in data ) {
 			if( data.hasOwnProperty(url) ) {
+				console.log(url);
+				console.log(data[url].shares);
 				return data[url].shares;
 			}
 		}
@@ -38,6 +55,6 @@
 
 	};
 
-	$.aikaPluginSocialButtons.buttons["mail-share"] = button;
+	$.aikaCore.addPluginObject('aikaSocialButtons', 'buttons', button.name, button);
 
 })(jQuery);

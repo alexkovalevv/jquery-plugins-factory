@@ -20,7 +20,7 @@
 			order: ['facebook-share'],
 			// Стиль кнопок
 			style: {
-				theme: 'default',
+				name: 'starter',
 				layout: 'horizontal'
 			},
 			// Эффект кнопок
@@ -40,6 +40,7 @@
 			/// вызываем родительский метод
 			this.superclass.prepareOptions.call(this);
 
+			this._style = this.options.style && this.options.style.name || this._default.style['name']
 			this._layout = this.options.layout || this._default['layout'];
 			this._align = this.options.align || this._default['align'];
 			this._size = this.options.size || this._default['size'];
@@ -57,6 +58,7 @@
 		_createTemplate: function() {
 			this.addClass(this.element, [
 				'plugin',
+				'style-' + this._style,
 				this._layout,
 				this._align,
 				this._size,
@@ -65,54 +67,49 @@
 		},
 
 		_renderButtons: function() {
-			for( var i in this._order ) {
-				if( !this._order.hasOwnProperty(i) ) {
-					continue;
-				}
+			var self = this;
 
-				var buttonName = this._order[i];
+			$.map(this.options.order, function(buttonName, index) {
 
-				if( !this._buttons[buttonName] ) {
-					this.showCriticalError('Кнопка {' + buttonName + '} не зарегистрирована. Пожалуйста, проверьте конфигурацию плагина.');
+				if( !self._buttons[buttonName] ) {
+					self.showCriticalError('Кнопка {' + buttonName + '} не зарегистрирована. Пожалуйста, проверьте конфигурацию плагина.');
 				}
 
 				var parts = buttonName.split('-'),
 					networkName = parts.length === 2 ? parts[0] : null,
 					buttonType = parts.length === 2 ? parts[1] : null;
 
-				var buttonOptions = $.extend(true, {}, this.options);
+				var buttonOptions = $.extend(true, {}, self.options);
 
-				if( this.options[networkName] && this.options[networkName][buttonType] ) {
-					buttonOptions = $.extend(true, buttonOptions, this.options[networkName][buttonType]);
+				if( self.options[networkName] && self.options[networkName][buttonType] ) {
+					buttonOptions = $.extend(true, buttonOptions, self.options[networkName][buttonType]);
 				}
 
-				this._buttons[buttonName].prefix = this.prefix;
-				this._buttons[buttonName].network = networkName;
+				self._buttons[buttonName].prefix = self.prefix;
+				self._buttons[buttonName].network = networkName;
+				self._buttons[buttonName].idx = index;
 
-				this._buttons[buttonName].init(buttonOptions);
+				self._buttons[buttonName].init(buttonOptions);
+				self._buttons[buttonName].create(self.element);
 
-				this._buttons[buttonName].getState().always(function(counterNumber) {
-					console.log(counterNumber);
-					if( !counterNumber ) {
-						counterNumber = 0;
-					}
-				});
+				if( self._buttons[buttonName].buttonType == 'custom' ) {
+					self._buttons[buttonName].getState().always(function(counterNumber) {
+						console.log(counterNumber);
+						if( !counterNumber ) {
+							counterNumber = 0;
+						}
+						self._buttons[buttonName].updateCounter(counterNumber);
+						self._buttons[buttonName].setLoadingState();
+					});
+				}
+			});
 
-				this._buttons[buttonName].render(this.element);
+			for( var i in this._order ) {
+				if( !this._order.hasOwnProperty(i) ) {
+					continue;
+				}
 
-				/*$.map(this.options.order, function(buttonName) {
-				 var button = self._createButton(buttonName);
-
-				 button.getState().always(function(counterNumber) {
-				 if( !counterNumber ) {
-				 counterNumber = 0;
-				 }
-				 counterNumber = parseInt(counterNumber);
-				 //self.totalCounter = self.totalCounter + counterNumber;
-
-				 self._loadButtons[buttonName] = button.render();
-				 });
-				 };*/
+				var buttonName = this._order[i];
 
 				/*var buttons = '';
 				 var timer = setInterval(function() {

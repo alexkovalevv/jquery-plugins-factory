@@ -437,5 +437,31 @@
 		} while( firstOpen != -1 );
 		return false;
 	};
+
+	/**
+	 * Проверяет тип домена возможные варианты:
+	 * punycode|cyrillic|normal
+	 * @param str
+	 * @return {string} - домен
+	 */
+	$.aikaApi.tools.checkDomainType = function(str) {
+		if( /(?:[\u0410-\u044F0-9-.]+)?[\u0410-\u044F0-9-]+\.[\u0410-\u044F0-9-]{2,}/i.test(str) ) {
+			return 'cyrillic';
+		} else if( /(?:xn--[A-z0-9-.]+)?xn--[A-z0-9-]+\.xn--[A-z0-9-]{2,}/i.test(str) ) {
+			return 'punycode';
+		}
+		return 'normal';
+	};
+
+	/**
+	 * Форматирует киррилический домен
+	 * @param str
+	 * @return {string} - отформатированный домен
+	 */
+	$.aikaApi.tools.normalizecyrillicDomain = function(str) {
+		var re = /(?:[\u0410-\u044F0-9-.]+)?\u0410-\u044F0-9-]+\.[\u0410-\u044F0-9-]{2,}/i;
+		var found = str.match(re);
+		return found[0];
+	};
 })(jQuery);
 

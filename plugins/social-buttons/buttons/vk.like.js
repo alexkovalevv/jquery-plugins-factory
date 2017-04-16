@@ -12,107 +12,62 @@
 (function($) {
 	'use strict';
 
-	if( !$.pandalocker.vk_like ) {
-		$.pandalocker.vk_like = {};
-	}
-
-	var button = $.pandalocker.tools.extend($.pandalocker.entity.socialButton);
+	var button = $.aikaCore.extendPluginClass('aikaSocialButtons', ['control', 'iframe-buttons-loader']);
 
 	button.name = "vk-like";
-	button.sdk = 'onp';
-	button.verification.container = '.onp-button-loaded';
 
 	button._defaults = {
-		type: 'mini',
+		// Заголовок кнопки (только для шкафчиков или произвольных кнопок)
+		title: 'like',
+		// Тип кнопки
+		buttonType: 'iframe',
+		// Заголовок записи на стене
 		pageTitle: null,
+		// Описание записи на стене
 		pageDescription: null,
+		// Url записи на стене
 		pageUrl: null,
+		// Изображение записи на стене
 		pageImage: null,
+		// Id страницы, необходимо задавать если url страницы не изменяется.
 		pageId: null,
-		verb: 0,
+		// Обязательно делиться с друзьями, если true
 		requireSharing: 1
 	};
 
-	/**
-	 * The funtions which returns an URL to like/share for the button.
-	 * Uses the options and a current location to determine the URL.
-	 */
-	button._extractUrl = function() {
-		var URL = this.options.pageUrl || this.networkOptions.url || window.location.href;
-
-		if( $.pandalocker.tools.cdmt(URL) == 'cyrillic' ) {
-			var arrUrlParts = URL.split("/");
-			URL = arrUrlParts[0] + '//' + punycode.toASCII($.pandalocker.tools.ncdn(arrUrlParts[2]));
-		}
-		return $.pandalocker.tools.URL.normalize(URL);
-	};
-
 	button.prepareOptions = function() {
-		this.url = this._extractUrl();
-
-		if( "vertical" === this.groupOptions.layout ) {
-			this.options.type = "vertical";
-		}
-
-		this.options.counter = "vertical" === this.groupOptions.layout ? true : this.groupOptions.counters;
+		// Кнопка не может иметь друкой тип.
+		this.buttonType = 'iframe';
 	};
 
-	button.setupEvents = function() {
-		var self = this;
-	};
+	// Вконтакте не любит киррилические домены, поэтому мы преобразуем url перед тем, как его использовать.
+	button._extractUrl = function() {
+		var URL = this.options.url || window.location.href;
 
-	button._extendCallback = function(data) {
-		var otherInfo = data.userInfo;
-
-		if( !this.options.requireSharing ) {
-			if( data.event === 'liked' ) {
-				if( this.url !== $.pandalocker.tools.URL.normalize(data.url) ) {
-					return;
-				}
-
-				this.unlock("button", this.name, this.url);
-			}
+		if( $.aikaApi.tools.checkDomainType(URL) == 'cyrillic' ) {
+			var arrUrlParts = URL.split("/");
+			URL = arrUrlParts[0] + '//' + $.aikaApi.punycode.toASCII($.aikaApi.tools.normalizecyrillicDomain(arrUrlParts[2]));
 		}
-
-		if( data.event === 'shared' ) {
-			if( this.url !== $.pandalocker.tools.URL.normalize(data.url) ) {
-				return;
-			}
-
-			this.unlock("button", this.name, this.url);
-		}
-
-		if( data.event === 'unliked' ) {
-			this.showNotice($.pandalocker.lang.alerts.social_unshare);
-		}
+		return $.aikaApi.tools.URL.normalize(URL);
 	};
 
 	button.renderButton = function($holder) {
-		var self = this;
+		this.button = $("<div></div>").appendTo($holder);
+		this.button.attr('id', this.uq(this.name + '-' + 'widget-id') + Math.floor((Math.random() * 999999) + 1));
 
-		this.button = $('<div></div>').appendTo($holder);
-
-		this.widgetId = "onp-vk-like-widget-" + Math.floor((Math.random() * 999999) + 1);
-		this.button.attr('id', this.widgetId);
-
-		if( !window.ONPWGT ) {
-			return;
-		}
-
-		window.ONPWGT.init(this.widgetId, 'vk-like', {
-			type: this.options.type,
+		this.createIframeButton(this.button, button.name, {
 			pageTitle: this.options.pageTitle,
 			pageDescription: this.options.pageDescription,
 			pageUrl: this.url,
 			pageImage: this.options.pageImage,
 			pageId: this.options.pageId,
-			counter: this.options.counter,
-			verb: this.options.verb
-		}, function(data) {
-			self._callback(data);
+			lang: this.lang,
+			layout: this.layout,
+			counter: this.counter,
+			requireSharing: this.options.requireSharing
 		});
-
 	};
 
-	$.pandalocker.controls["social-buttons"]["vk-like"] = button;
-})(__$onp);
+	$.aikaCore.addPluginObject('aikaSocialButtons', 'buttons', button.name, button);
+
+})(jQuery);

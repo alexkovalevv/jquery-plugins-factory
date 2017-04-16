@@ -687,12 +687,6 @@
 
 	}());
 
-	if( !$.pandalocker ) {
-		$.pandalocker = {};
-	}
-	if( !$.pandalocker.tools ) {
-		$.pandalocker.tools = {};
-	}
-	$.pandalocker.tools.URL = URL;
+	$.aikaApi.tools.URL = URL;
 
-})(__$onp);
+})($);

@@ -6,14 +6,23 @@
     <script src="libs/jquery.min.js"></script>
     <script src="core/vars.js"></script>
     <script src="core/includes/api.tools.js"></script>
+    <script src="core/includes/api.punycode.js"></script>
+    <script src="core/includes/api.urls.js"></script>
     <script src="core/includes/api.filters.js"></script>
     <script src="core/includes/api.sdk.js"></script>
     <script src="core/core.js"></script>
     <script src="core/plugin.js"></script>
     <!-- Плагин социальных кнопок-->
+    <link rel="stylesheet" href="plugins/social-buttons/assets/css/default.css">
+    <link rel="stylesheet" href="plugins/social-buttons/assets/css/themes/starter.css">
+    <script src="plugins/social-buttons/includes/class.iframe-buttons-loader.js"></script>
     <script src="plugins/social-buttons/includes/class.control.js"></script>
+    <script src="plugins/social-buttons/buttons/mail.share.js"></script>
     <script src="plugins/social-buttons/buttons/facebook.share.js"></script>
     <script src="plugins/social-buttons/buttons/google.share.js"></script>
+    <script src="plugins/social-buttons/buttons/facebook.like.js"></script>
+    <script src="plugins/social-buttons/buttons/vk.like.js"></script>
+    <script src="plugins/social-buttons/buttons/vk.share.js"></script>
     <script src="plugins/social-buttons/plugin.js"></script>
     <!-- /Компонент социальных кнопок -->
     <!-- Плагин магическая коробка -->
@@ -34,15 +43,25 @@
         (function($) {
             $(function() {
                 $('.test').aikaSocialButtons({
-                    order: ['facebook-share', 'google-share'],
+                    order: ['facebook-share', 'mail-share', 'google-share', 'facebook-like', 'vk-share', 'vk-like',],
+                    vk: {
+                        like: {
+                            buttonType: 'custom'
+                        },
+                        share: {
+                            buttonType: 'custom',
+                            url: 'https://sociallocker.ru'
+                        }
+                    },
                     facebook: {
                         share: {
-                            url: 'https://yandex.ru'
+                            buttonType: 'custom',
+                            url: 'https://sociallocker.ru'
                         }
                     },
                     google: {
                         share: {
-                            url: 'https://yandex.ru'
+                            url: 'https://sociallocker.ru'
                         }
                     }
                 });

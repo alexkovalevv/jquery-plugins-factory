@@ -13,7 +13,7 @@
 	button.name = 'google-share';
 
 	button._defaults = {
-		title: 'Share',
+		title: 'Поделиться',
 		counterUrl: '//share.yandex.ru/gpp.xml?url={url}&callback=?',
 		popupUrl: 'https://plus.google.com/share?url={url}',
 		popupWidth: 500,
