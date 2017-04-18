@@ -13,10 +13,17 @@
 	button.name = 'google-share';
 
 	button._defaults = {
+		// Заголовок кнопки (только для шкафчиков или произвольных кнопок)
 		title: 'Поделиться',
-		counterUrl: '//share.yandex.ru/gpp.xml?url={url}&callback=?',
-		popupUrl: 'https://plus.google.com/share?url={url}',
+		// Тип кнопки (iframe, custom)
+		buttonType: 'custom',
+		// Url всплывающего окна
+		counterUrl: '//share.yandex.ru/gpp.xml?url={pageUrl}&callback=?',
+		// Url для получения счетчика
+		popupUrl: 'https://plus.google.com/share?url={pageUrl}',
+		// Ширина всплывающего окна
 		popupWidth: 500,
+		// Высота всплывающего окна
 		popupHeight: 550
 	};
 
@@ -34,6 +41,6 @@
 			'</svg>';
 	};
 
-	$.aikaCore.addPluginObject('aikaSocialButtons', 'buttons', 'google-share', button);
+	$.aikaCore.addPluginObject('aikaSocialButtons', 'buttons', button.name, button);
 
 })(jQuery);

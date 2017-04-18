@@ -33,13 +33,13 @@
 
 		create: function() {
 			this.prefix = this.uq('sbtns', '-');
+			this._setupEvents();
 			this._render();
+
+			this.showError('test test');
 		},
 
-		prepareOptions: function() {
-			/// вызываем родительский метод
-			this.superclass.prepareOptions.call(this);
-
+		_extendPrepareOptions: function() {
 			this._style = this.options.style && this.options.style.name || this._default.style['name']
 			this._layout = this.options.layout || this._default['layout'];
 			this._align = this.options.align || this._default['align'];
@@ -48,6 +48,21 @@
 			this._order = this.options.order || this._default['order'];
 
 			this._buttons = this.getPluginObjects('buttons');
+		},
+
+		_setupEvents: function() {
+			var self = this;
+
+			$(document).on('click', '.' + this.uq('btn'), function() {
+				var buttonName = $(this).data('button-name');
+				if( !self._issetButton[buttonName] ) {
+					return false;
+				}
+				self.runHook('before-open-share-window', [buttonName, self._buttons[buttonName].options]);
+				self._buttons[buttonName].openShareWindow();
+
+				return false;
+			});
 		},
 
 		_render: function() {
@@ -70,9 +85,8 @@
 			var self = this;
 
 			$.map(this.options.order, function(buttonName, index) {
-
-				if( !self._buttons[buttonName] ) {
-					self.showCriticalError('Кнопка {' + buttonName + '} не зарегистрирована. Пожалуйста, проверьте конфигурацию плагина.');
+				if( !self._issetButton(buttonName) ) {
+					return;
 				}
 
 				var parts = buttonName.split('-'),
@@ -85,52 +99,45 @@
 					buttonOptions = $.extend(true, buttonOptions, self.options[networkName][buttonType]);
 				}
 
+				// Расширяем кнопки публичный api плагина
+				self._buttons[buttonName] = $.extend(true, self.getPluginPublicApi(), self._buttons[buttonName]);
+
 				self._buttons[buttonName].prefix = self.prefix;
 				self._buttons[buttonName].network = networkName;
-				self._buttons[buttonName].idx = index;
+				self._buttons[buttonName].index = index;
 
 				self._buttons[buttonName].init(buttonOptions);
 				self._buttons[buttonName].create(self.element);
 
-				if( self._buttons[buttonName].buttonType == 'custom' ) {
-					self._buttons[buttonName].getState().always(function(counterNumber) {
-						console.log(counterNumber);
-						if( !counterNumber ) {
-							counterNumber = 0;
-						}
-						self._buttons[buttonName].updateCounter(counterNumber);
-						self._buttons[buttonName].setLoadingState();
-					});
-				}
+				self._renderButton(buttonName);
 			});
+		},
 
-			for( var i in this._order ) {
-				if( !this._order.hasOwnProperty(i) ) {
-					continue;
-				}
+		_renderButton: function(buttonName) {
+			var self = this;
 
-				var buttonName = this._order[i];
-
-				/*var buttons = '';
-				 var timer = setInterval(function() {
-				 if( Object.keys(self._loadButtons).length === self.options.order.length ) {
-				 for( var i in self.options.order ) {
-				 if( !self._loadButtons.hasOwnProperty(self.options.order[i]) ) {
-				 continue;
-				 }
-				 //$('.' + buttonContanier, self.element)
-				 //.append(self._loadButtons[self.options.order[i]]);
-				 buttons += self._loadButtons[self.options.order[i]];
-
-				 self.runHook('button-after-create', [self.options.order[i]]);
-				 }
-
-				 //self._createButtonTotalCounter();
-
-				 clearInterval(timer);
-				 }
-				 }, 50);*/
+			if( !self._issetButton(buttonName) ) {
+				return;
 			}
+
+			if( self._buttons[buttonName].buttonType == 'custom' ) {
+				self._buttons[buttonName].getState().always(function(counterNumber) {
+					if( !counterNumber ) {
+						counterNumber = 0;
+					}
+					self._buttons[buttonName].updateCounter(counterNumber);
+					self._buttons[buttonName].setLoadingState();
+				});
+			}
+		},
+
+		_issetButton: function(buttonName) {
+			if( !this._buttons[buttonName] ) {
+				this.showCriticalError('Кнопка {' + buttonName + '} не зарегистрирована. Пожалуйста, проверьте конфигурацию плагина.');
+				return false;
+			}
+
+			return true;
 		},
 
 		showWarning: function(message, sender, showForce) {
@@ -167,49 +174,7 @@
 			}
 
 			throw new Error(message);
-		},
-
-		/**
-		 * Получает скрипт счетчика c помощью функции getJSON
-		 * @param callback
-		 * @returns void
-		 */
-		_getShareCounterJson: function() {
-			var self = this;
-			$.getJSON(this.makeUrl(this.options.counterUrl, {
-				url: this.url
-			})).done(function(data) {
-				try {
-					var number = data;
-					if( $.isFunction(self.convertNumber) ) {
-						number = self.convertNumber(data);
-					}
-					self._deferred.resolve(number);
-				}
-				catch( e ) {
-					self._deferred.reject();
-				}
-			}).fail(self._deferred.reject);
-		},
-
-		/**
-		 * Получает скрипт счетчика c помощью функции getScript
-		 * @param callback
-		 * @returns void
-		 */
-		_getShareCounterScripts: function(callback) {
-			$.getScript(this.makeUrl(this.options.counterUrl, {
-				url: this.url,
-				index: this.idx
-			}), callback ? callback : function() {
-			}).fail(this._deferred.reject);
 		}
+
 	});
-
-	/*$(document).ready(function() {
-	 $('.content').aikaSocialButtons({
-	 order: ['tumblr-share', 'google-share']
-	 });
-	 });*/
-
 })(jQuery);

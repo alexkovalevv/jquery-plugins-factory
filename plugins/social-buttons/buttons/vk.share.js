@@ -20,24 +20,17 @@
 		// Заголовок кнопки (только для шкафчиков или произвольных кнопок)
 		title: 'Поделиться',
 		// Тип кнопки (iframe, custom)
-		// по умолчанию iframe
 		buttonType: 'iframe',
-		// Заголовок записи на стене
-		pageTitle: null,
-		// Описание записи на стене
-		pageDescription: null,
-		// Url записи на стене
-		pageUrl: null,
-		// Изображение записи на стене
-		pageImage: null,
+		// Id страницы, необходимо задавать если url страницы не изменяется.
+		pageId: null,
 		// Ширина всплывающего окна
 		popupWidth: 655,
 		// Высота всплывающего окна
 		popupHeight: 450,
 		// Url всплывающего окна
-		popupUrl: '//vk.com/share.php?url={url}&title={title}',
+		popupUrl: '//vk.com/share.php?url={pageUrl}&title={pageTitle}&description={pageDescription}&image={pageImage}',
 		// Url для получения счетчика
-		counterUrl: '//vk.com/share.php?act=count&url={url}&index={index}'
+		counterUrl: '//vk.com/share.php?act=count&url={pageUrl}&index={index}'
 	};
 
 	// Вконтакте не любит киррилические домены, поэтому мы преобразуем url перед тем, как его использовать.
@@ -52,7 +45,7 @@
 	};
 
 	button.prepareOptions = function() {
-		this.idx = parseInt(this.idx) + 100;
+		this.index = parseInt(this.index) + 100;
 
 		if( $.aikaApi.tools.checkDomainType(this.url) == 'punycode' ) {
 			this.counter = false;
@@ -61,7 +54,7 @@
 
 	button.counterInit = function() {
 		var self = this;
-		$(document).bind($.aikaApi.tools.hash('vk-counter-ready-' + this.idx), function(e, idx, number) {
+		$(document).bind($.aikaApi.tools.hash('vk-counter-ready-' + this.index), function(e, index, number) {
 			self._deferred.resolve(number);
 		});
 		this.initCheck();
@@ -110,7 +103,7 @@
 		}
 
 		if( window.VK.Share.count ) {
-			window.__onp_wdgt_vk_share_couter_callbacks[this.idx] = window.VK.Share.count;
+			window.__onp_wdgt_vk_share_couter_callbacks[this.index] = window.VK.Share.count;
 		}
 
 		window.VK.Share.count = self.getCounterByVkMethod;
@@ -120,14 +113,14 @@
 	 * Вызывает тригер установки счетчика, с помощью метода вконтакте.
 	 * Если индекс счетчика меньше 100, значит этот метод не наш, просто вызываем его,
 	 * чтобы не сломать чужое приложение.
-	 * @param idx
+	 * @param index
 	 * @param number
 	 */
-	button.getCounterByVkMethod = function(idx, number) {
-		if( idx > 100 ) {
-			$(document).trigger($.aikaApi.tools.hash('vk-counter-ready-' + idx), [idx, number]);
+	button.getCounterByVkMethod = function(index, number) {
+		if( index > 100 ) {
+			$(document).trigger($.aikaApi.tools.hash('vk-counter-ready-' + index), [index, number]);
 		} else {
-			window.__onp_wdgt_vk_share_couter_callbacks[this.idx] && window.__onp_wdgt_vk_share_couter_callbacks[this.idx](idx, number);
+			window.__onp_wdgt_vk_share_couter_callbacks[index] && window.__onp_wdgt_vk_share_couter_callbacks[index](index, number);
 		}
 	};
 
@@ -153,10 +146,10 @@
 		this.button.attr('id', this.uq(this.name + '-' + 'widget-id') + Math.floor((Math.random() * 999999) + 1));
 
 		this.createIframeButton(this.button, button.name, {
-			pageTitle: this.options.pageTitle,
-			pageDescription: this.options.pageDescription,
+			pageTitle: this.pageTitle,
+			pageDescription: this.pageDescription,
 			pageUrl: this.url,
-			pageImage: this.options.pageImage,
+			pageImage: this.pageImage,
 			pageId: this.options.pageId,
 			layout: this.layout,
 			counter: this.counter,

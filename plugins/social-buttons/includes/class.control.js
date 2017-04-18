@@ -5,11 +5,15 @@
 
 	socialButton.init = function(options) {
 
+		this._isRendered = false;
+
 		this.options = $.extend(true, this._defaults, options);
+
+		this.title = this.options.title || this._defaults.title;
 		this.lang = 'ru_RU';
 		this.buttonType = this.options.buttonType || 'custom';
 		this.layout = this.options.style.layout || 'horizontal';
-
+		this.effect = this.options.effect;
 		this.availableCounter = true;
 		this.counter = this.options.counter || this.options.counters;
 
@@ -17,21 +21,23 @@
 			this.counter = true;
 		}
 
-		if( !this.availableCounter ) {
-			this.counter = false;
-		}
-
-		this.effect = this.options.effect;
-		this.url = this._extractUrl();
-		this.title = this.options.title || this._defaults.title;
+		this.pageUrlHash = $.aikaApi.tools.hash(this.pageUrl);
 		this.counterNumber = 0;
-		this.urlHash = $.aikaApi.tools.hash(this.url);
-		this.counterCacheName = this.uq('cache-counter') + '-' + this.urlHash;
+		this.counterCacheName = this.uq('cache-counter') + '-' + this.pageUrlHash;
+
+		this.pageUrl = this._extractPageUrl();
+		this.pageTitle = this.options.pageTitle || this._extractPageTitle();
+		this.pageDescription = this.options.pageDescription || this._extractPageDescription();
+		this.pageImage = this.options.pageImage || this._extractPageImage();
 
 		this._deferred = $.Deferred();
 
 		if( this.prepareOptions ) {
 			this.prepareOptions();
+		}
+
+		if( !this.availableCounter ) {
+			this.counter = false;
 		}
 
 		if( this.buttonType == 'iframe' ) {
@@ -47,7 +53,27 @@
 			return;
 		}
 
-		this._deferred.resolve();
+		this._deferred.resolve(0);
+	};
+
+	/**
+	 * Открывает окно для публикации сообщения в социальную сеть
+	 */
+	socialButton.openShareWindow = function() {
+		var self = this;
+
+		if( this.buttonType !== 'custom' || !this.options.popupUrl ) {
+			throw new Error('Окно не может быть вызвано, так как этот тип кнопок не поддерживает эту возможность.');
+		}
+
+		self.runHook('open-share-window', [self.name, self.options]);
+
+		var shareUrl = this.makeUrl(this.options.popupUrl, this);
+
+		$.aikaApi.tools.openWindow(shareUrl, {winName: 'Share by ' + this.name}, function() {
+			// Выполнит хук, если окно было закрыто
+			self.runHook('close-share-window', [self.name, self.options]);
+		});
 	};
 
 	/**
@@ -74,7 +100,7 @@
 	 */
 	socialButton.renderCustomButton = function($holder) {
 		var button = $('<a href="#"></a>');
-		button.data('buttons-name', this.name);
+		button.data('button-name', this.name);
 		this.addClass(button, ['btn']);
 
 		var bage = $('<span class="' + this.uq('btn-bage') + '">' +
@@ -112,6 +138,9 @@
 		}
 
 		this.addClass(this.innerWrap, 'control-inner-wrap');
+
+		this._isRendered = true;
+
 		this.renderButton(this.innerWrap);
 	};
 
@@ -249,9 +278,7 @@
 	socialButton.getShareCounterJson = function() {
 		var self = this;
 
-		$.getJSON(this.makeUrl(this.options.counterUrl, {
-			url: this.url
-		})).done(function(data) {
+		$.getJSON(this.makeUrl(this.options.counterUrl, this)).done(function(data) {
 			try {
 				var number = data;
 				if( $.isFunction(self.convertNumber) ) {
@@ -271,15 +298,60 @@
 	 * @returns void
 	 */
 	socialButton.getShareCounterScripts = function(callback) {
-		console.log(this.makeUrl(this.options.counterUrl, {
-			url: this.url,
-			index: this.idx
-		}));
-		$.getScript(this.makeUrl(this.options.counterUrl, {
-			url: this.url,
-			index: this.idx
-		}), callback ? callback : function() {
+		$.getScript(this.makeUrl(this.options.counterUrl, this), callback ? callback : function() {
 		}).fail(this._deferred.reject);
+	};
+
+	// ----------------------------------------------------------------
+	// Обработка ошибок
+	// ----------------------------------------------------------------
+
+	socialButton._setError = function(message) {
+		if( this._error ) {
+			return;
+		}
+		this._error = message;
+	};
+
+	socialButton._hasError = function() {
+		return this._error ? true : false;
+	};
+
+	socialButton.showError = function(message, $holder) {
+		var self = this;
+
+		if( !this._isRendered ) {
+			this.runHook('control-error', [self.name, message]);
+			this._setError(message);
+			return;
+		}
+
+		var $holder = $holder || this.innerWrap;
+		var message = message || this._error;
+
+		this.runHook('control-error', [self.name, message]);
+
+		if( this.wrap.hasClass('onp-sl-state-error') ) {
+			return;
+		}
+
+		self.removeClass(self.wrap, 'button-loaded');
+		self.addClass(self.wrap, 'state-error');
+
+		var $error = this.createErrorMarkup(message).appendTo($holder);
+
+		$error.find("." + this.uq('control-error-title')).click(function() {
+			//self.group.showError(self.name, message);
+			self.runHook('open-control-error-message', [self.name, message]);
+			return false;
+		});
+	};
+
+	/**
+	 * Creats the markup for the error.
+	 */
+	socialButton.createErrorMarkup = function(text) {
+		return $("<div class='" + this.uq('control-error-body') + "'><a href='#' class='" + this.uq('control-error-title') + "'>" + text + "</a></div>");
 	};
 
 	// ----------------------------------------------------------------
@@ -302,16 +374,33 @@
 		return n + "k";
 	};
 
-	/**
-	 * The funtions which returns an URL to like/share for the button.
-	 * Uses the options and a current location to determine the URL.
-	 */
-	socialButton._extractUrl = function() {
-		return this.options.url || window.location.href;
+	// Извлекает url страницы
+	socialButton._extractPageUrl = function() {
+		return $.aikaApi.tools.URL.normalize(this.options.pageUrl || window.location.href);
 	};
 
+	// Извлекает заголовок страницы
+	// Обрабатывается внутри кнопки
+	socialButton._extractPageTitle = function() {
+		return null;
+	};
+
+	// Извлекает заголовок страницы
+	// Обрабатывается внутри кнопки
+	socialButton._extractPageDescription = function() {
+		return null;
+	};
+
+	// Извлекает описание страницы
+	// Обрабатывается внутри кнопки
+	socialButton._extractPageImage = function() {
+		return null;
+	};
+
+	// Извлекает изображение страницы
+	// Обрабатывается внутри кнопки
 	socialButton.makeUrl = function(url, context) {
-		return $.aikaApi.tools.createSkin(url, context);
+		return $.aikaApi.tools.buildUrl(url, context);
 	};
 
 	/*socialButton.showWarning = function(message, sender, showForce) {

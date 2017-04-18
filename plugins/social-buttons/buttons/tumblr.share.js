@@ -8,14 +8,24 @@
 (function($) {
 	'use strict';
 
-	var button = $.aikaApi.tools.extend($.aikaPluginSocialButtons.control);
+	var button = $.aikaCore.extendPluginClass('aikaSocialButtons', 'control');
 
 	button.name = 'tumblr-share';
 
 	button._defaults = {
-		counterUrl: '//api.tumblr.com/v2/share/stats?url={url}&callback=?',
-		popupUrl: 'http://tumblr.com/widgets/share/tool?canonicalUrl={url}',
+		// Заголовок кнопки (только для шкафчиков или произвольных кнопок)
+		title: 'Поделиться',
+		// Тип кнопки (iframe, custom)
+		buttonType: 'custom',
+		// Url записи на стене
+		url: null,
+		// Url всплывающего окна
+		counterUrl: '//api.tumblr.com/v2/share/stats?url={pageUrl}&callback=?',
+		// Url для получения счетчика
+		popupUrl: 'http://tumblr.com/widgets/share/tool?canonicalUrl={pageUrl}',
+		// Ширина всплывающего окна
 		popupWidth: 600,
+		// Высота всплывающего окна
 		popupHeight: 359
 	};
 
@@ -27,6 +37,10 @@
 		this.getShareCounterJson();
 	};
 
-	$.aikaPluginSocialButtons.buttons["tumblr-share"] = button;
+	button.getIcon = function() {
+		return null;
+	};
+
+	$.aikaCore.addPluginObject('aikaSocialButtons', 'buttons', button.name, button);
 
 })(jQuery);

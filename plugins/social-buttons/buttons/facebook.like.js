@@ -20,9 +20,7 @@
 		// Заголовок кнопки (только для шкафчиков или произвольных кнопок)
 		title: 'like',
 		// Тип кнопки
-		buttonType: 'iframe',
-		// Url которым нужно поделиться
-		url: null
+		buttonType: 'iframe'
 	};
 
 	button.prepareOptions = function() {
@@ -39,9 +37,8 @@
 		this.button.attr('id', this.uq(this.name + '-' + 'widget-id') + Math.floor((Math.random() * 999999) + 1));
 
 		this.createIframeButton(this.button, button.name, {
-			href: this.url,
+			href: this.pageUrl,
 			counter: this.options.counter,
-			//layout: this.layout,
 			lang: this.lang
 		});
 	};

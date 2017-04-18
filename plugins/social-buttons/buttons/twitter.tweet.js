@@ -8,14 +8,55 @@
 (function($) {
 	'use strict';
 
-	var button = $.aikaApi.tools.extend($.aikaPluginSocialButtons.control);
+	var button = $.aikaCore.extendPluginClass('aikaSocialButtons', 'control');
 
 	button.name = "twitter-tweet";
 
-	button._defaults = {};
+	button._defaults = {
+		// Заголовок кнопки (только для шкафчиков или произвольных кнопок)
+		title: 'Поделиться',
+		// Тип кнопки (iframe, custom)
+		buttonType: 'custom',
+		// От кого публикуем твит
+		via: 'sociallocker',
+		// Хештеги
+		hashtags: null,
+		// Url всплывающего окна
+		popupUrl: 'https://twitter.com/intent/tweet?via={via}&text={pageDescription}&url={pageUrl}&hashtags={hashtags}',
+		// Ширина всплывающего окна
+		popupWidth: 740,
+		// Высота всплывающего окна
+		popupHeight: 550
+	};
 
 	button.prepareOptions = function() {
+		// Отключаем счетчик для этой кнопки
 		this.availableCounter = false;
+		this.via = this.options.via;
+		this.hashtags = this.options.hashtags;
+	};
+
+	// Извлекает url страницы
+	button._extractPageUrl = function() {
+		if( !this.options.pageUrl && $("link[rel='canonical']").length > 0 ) {
+			return $.aikaApi.tools.URL.normalize($("link[rel='canonical']").attr('href'));
+		}
+		return $.aikaApi.tools.URL.normalize(this.options.pageUrl || window.location.href);
+	};
+
+	// Извлекает заголовок страницы
+	// Обрабатывается внутри кнопки
+	button._extractPageDescription = function() {
+		var $title = $("title");
+
+		var description;
+		if( $title.length > 0 ) {
+			description = $($title[0]).text();
+		} else {
+			description = "";
+		}
+
+		return description;
 	};
 
 	button.getIcon = function() {
@@ -34,6 +75,6 @@
 			'</svg>';
 	};
 
-	$.aikaPluginSocialButtons.buttons["twitter-tweet"] = button;
+	$.aikaCore.addPluginObject('aikaSocialButtons', 'buttons', button.name, button);
 
 })(jQuery);

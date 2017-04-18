@@ -21,14 +21,6 @@
 		title: 'like',
 		// Тип кнопки
 		buttonType: 'iframe',
-		// Заголовок записи на стене
-		pageTitle: null,
-		// Описание записи на стене
-		pageDescription: null,
-		// Url записи на стене
-		pageUrl: null,
-		// Изображение записи на стене
-		pageImage: null,
 		// Id страницы, необходимо задавать если url страницы не изменяется.
 		pageId: null,
 		// Обязательно делиться с друзьями, если true
@@ -42,7 +34,7 @@
 
 	// Вконтакте не любит киррилические домены, поэтому мы преобразуем url перед тем, как его использовать.
 	button._extractUrl = function() {
-		var URL = this.options.url || window.location.href;
+		var URL = this.options.pageUrl || window.location.href;
 
 		if( $.aikaApi.tools.checkDomainType(URL) == 'cyrillic' ) {
 			var arrUrlParts = URL.split("/");
@@ -56,10 +48,10 @@
 		this.button.attr('id', this.uq(this.name + '-' + 'widget-id') + Math.floor((Math.random() * 999999) + 1));
 
 		this.createIframeButton(this.button, button.name, {
-			pageTitle: this.options.pageTitle,
-			pageDescription: this.options.pageDescription,
-			pageUrl: this.url,
-			pageImage: this.options.pageImage,
+			pageTitle: this.pageTitle,
+			pageDescription: this.pageDescription,
+			pageUrl: this.pageUrl,
+			pageImage: this.pageImage,
 			pageId: this.options.pageId,
 			lang: this.lang,
 			layout: this.layout,

@@ -8,14 +8,22 @@
 (function($) {
 	'use strict';
 
-	var button = $.aikaApi.tools.extend($.aikaPluginSocialButtons.control);
+	var button = $.aikaCore.extendPluginClass('aikaSocialButtons', ['control', 'iframe-buttons-loader']);
 
 	button.name = 'linkedin-share';
 
 	button._defaults = {
-		counterUrl: '//www.linkedin.com/countserv/count/share?format=jsonp&url={url}&callback=?',
-		popupUrl: '//https://www.linkedin.com/shareArticle?mini=true&url={url}&title={title}&summary={description}',
+		// Заголовок кнопки (только для шкафчиков или произвольных кнопок)
+		title: 'Поделиться',
+		// Тип кнопки (iframe, custom)
+		buttonType: 'custom',
+		// Url всплывающего окна
+		counterUrl: '//www.linkedin.com/countserv/count/share?format=jsonp&url={pageUrl}&callback=?',
+		// Url для получения счетчика
+		popupUrl: '//https://www.linkedin.com/shareArticle?mini=true&url={pageUrl}&title={pageTitle}&summary={pageDescription}',
+		// Ширина всплывающего окна
 		popupWidth: 600,
+		// Высота всплывающего окна
 		popupHeight: 359
 	};
 
@@ -34,6 +42,6 @@
 
 	};
 
-	$.aikaPluginSocialButtons.buttons["linkedin-share"] = button;
+	$.aikaCore.addPluginObject('aikaSocialButtons', 'buttons', button.name, button);
 
 })(jQuery);

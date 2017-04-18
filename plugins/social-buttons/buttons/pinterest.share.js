@@ -8,14 +8,22 @@
 (function($) {
 	'use strict';
 
-	var button = $.aikaApi.tools.extend($.aikaPluginSocialButtons.control);
+	var button = $.aikaCore.extendPluginClass('aikaSocialButtons', 'control');
 
 	button.name = 'pinterest-share';
 
 	button._defaults = {
-		counterUrl: '//api.pinterest.com/v1/urls/count.json?url={url}&callback=?',
-		popupUrl: 'https://pinterest.com/pin/create/button/?url={url}&description={title}',
+		// Заголовок кнопки (только для шкафчиков или произвольных кнопок)
+		title: 'Поделиться',
+		// Тип кнопки (iframe, custom)
+		buttonType: 'custom',
+		// Url всплывающего окна
+		counterUrl: '//api.pinterest.com/v1/urls/count.json?url={pageUrl}&callback=?',
+		// Url для получения счетчика
+		popupUrl: 'https://pinterest.com/pin/create/button/?url={pageUrl}&description={pageDescription}',
+		// Ширина всплывающего окна
 		popupWidth: 740,
+		// Высота всплывающего окна
 		popupHeight: 550
 	};
 
@@ -34,6 +42,6 @@
 
 	};
 
-	$.aikaPluginSocialButtons.buttons["pinterest-share"] = button;
+	$.aikaCore.addPluginObject('aikaSocialButtons', 'buttons', button.name, button);
 
 })(jQuery);

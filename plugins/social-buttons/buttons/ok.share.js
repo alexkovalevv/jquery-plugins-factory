@@ -8,30 +8,36 @@
 (function($) {
 	'use strict';
 
-	if( !$.aikaPluginSocialButtons.okShare ) {
-		$.aikaPluginSocialButtons.okShare = {};
+	if( !window.__onp_wdgt_ok_share_couter_callbacks ) {
+		window.__onp_wdgt_ok_share_couter_callbacks = {};
 	}
-	$.aikaPluginSocialButtons.okShare.idx = 100;
 
-	var button = $.aikaApi.tools.extend($.aikaPluginSocialButtons.control);
+	var button = $.aikaCore.extendPluginClass('aikaSocialButtons', ['control', 'iframe-buttons-loader']);
 
-	button.name = 'odnoklassniki-share';
+	button.name = 'ok-share';
 
 	button._defaults = {
-		counterUrl: '//connect.ok.ru/dk?st.cmd=extLike&ref={url}&uid={index}',
-		popupUrl: 'https://connect.ok.ru/dk?st.cmd=WidgetSharePreview&service=odnoklassniki&st.shareUrl={url}',
+		// Заголовок кнопки (только для шкафчиков или произвольных кнопок)
+		title: 'Поделиться',
+		// Тип кнопки (iframe, custom)
+		buttonType: 'custom',
+		// Url всплывающего окна
+		counterUrl: '//connect.ok.ru/dk?st.cmd=extLike&ref={pageUrl}&uid={index}',
+		// Url для получения счетчика
+		popupUrl: 'https://connect.ok.ru/dk?st.cmd=WidgetSharePreview&service=odnoklassniki&st.shareUrl={pageUrl}',
+		// Ширина всплывающего окна
 		popupWidth: 580,
+		// Высота всплывающего окна
 		popupHeight: 336
 	};
 
 	button.prepareOptions = function() {
-		$.aikaPluginSocialButtons.okShare.idx++;
-		this.idx = $.aikaPluginSocialButtons.okShare.idx;
+		this.index = parseInt(this.index) + 100;
 	};
 
 	button.counterInit = function() {
 		var self = this;
-		$(document).bind($.aikaApi.tools.hash('ok-counter-ready-' + this.idx), function(e, idx, number) {
+		$(document).bind($.aikaApi.tools.hash('ok-counter-ready-' + this.index), function(e, index, number) {
 			self._deferred.resolve(number);
 		});
 		this.initCheck();
@@ -77,7 +83,7 @@
 		}
 
 		if( window.ODKL.updateCount ) {
-			$.aikaPluginSocialButtons.okShare.oldShareCallback = window.ODKL.updateCount;
+			window.__onp_wdgt_ok_share_couter_callbacks[this.index] = window.ODKL.updateCount;
 		}
 
 		window.ODKL.updateCount = self.getCounterByVkMethod;
@@ -87,16 +93,14 @@
 	 * Вызывает тригер установки счетчика, с помощью метода вконтакте.
 	 * Если индекс счетчика меньше 100, значит этот метод не наш, просто вызываем его,
 	 * чтобы не сломать чужое приложение.
-	 * @param idx
+	 * @param index
 	 * @param number
 	 */
-	button.getCounterByVkMethod = function(idx, number) {
-		if( idx > 100 ) {
-			$(document).trigger($.aikaApi.tools.hash('ok-counter-ready-' + idx), [idx, number]);
+	button.getCounterByVkMethod = function(index, number) {
+		if( index > 100 ) {
+			$(document).trigger($.aikaApi.tools.hash('ok-counter-ready-' + index), [index, number]);
 		} else {
-			if( $.aikaPluginSocialButtons.okShare.oldShareCallback ) {
-				$.aikaPluginSocialButtons.okShare.oldShareCallback(idx, number);
-			}
+			window.__onp_wdgt_ok_share_couter_callbacks[index] && window.__onp_wdgt_ok_share_couter_callbacks[index](index, number);
 		}
 	};
 
@@ -107,6 +111,6 @@
 
 	};
 
-	$.aikaPluginSocialButtons.buttons["odnoklassniki-share"] = button;
+	$.aikaCore.addPluginObject('aikaSocialButtons', 'buttons', button.name, button);
 
 })(jQuery);

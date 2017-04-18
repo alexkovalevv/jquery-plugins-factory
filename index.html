@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <title>Тестирование aika framework</title>
     <script src="libs/jquery.min.js"></script>
+    <script src="libs/modernizr.custom.js"></script>
+    <script src="libs/classie.js"></script>
+    <script src="libs/dialogFx.js"></script>
+    <link rel="stylesheet" href="core/assets/css/modals.css">
     <script src="core/vars.js"></script>
     <script src="core/includes/api.tools.js"></script>
     <script src="core/includes/api.punycode.js"></script>
@@ -23,6 +27,10 @@
     <script src="plugins/social-buttons/buttons/facebook.like.js"></script>
     <script src="plugins/social-buttons/buttons/vk.like.js"></script>
     <script src="plugins/social-buttons/buttons/vk.share.js"></script>
+    <script src="plugins/social-buttons/buttons/ok.share.js"></script>
+    <script src="plugins/social-buttons/buttons/pinterest.share.js"></script>
+    <script src="plugins/social-buttons/buttons/tumblr.share.js"></script>
+    <script src="plugins/social-buttons/buttons/twitter.tweet.js"></script>
     <script src="plugins/social-buttons/plugin.js"></script>
     <!-- /Компонент социальных кнопок -->
     <!-- Плагин магическая коробка -->
@@ -43,25 +51,26 @@
         (function($) {
             $(function() {
                 $('.test').aikaSocialButtons({
-                    order: ['facebook-share', 'mail-share', 'google-share', 'facebook-like', 'vk-share', 'vk-like',],
+                    pageTitle: '',
+                    pageUrl: 'https://yandex.ru',
+                    pageDescription: '',
+                    pageImage: '',
+
+                    order: [
+                        'twitter-tweet',
+                        'tumblr-share',
+                        'pinterest-share',
+                        'facebook-share',
+                        'ok-share',
+                        'mail-share',
+                        'google-share',
+                        'facebook-like',
+                        'vk-share',
+                        'vk-like'
+                    ],
                     vk: {
-                        like: {
+                        share: {
                             buttonType: 'custom'
-                        },
-                        share: {
-                            buttonType: 'custom',
-                            url: 'https://sociallocker.ru'
-                        }
-                    },
-                    facebook: {
-                        share: {
-                            buttonType: 'custom',
-                            url: 'https://sociallocker.ru'
-                        }
-                    },
-                    google: {
-                        share: {
-                            url: 'https://sociallocker.ru'
                         }
                     }
                 });

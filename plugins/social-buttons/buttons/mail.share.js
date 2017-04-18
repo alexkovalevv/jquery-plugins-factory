@@ -15,18 +15,12 @@
 	button._defaults = {
 		// Заголовок кнопки (только для шкафчиков или произвольных кнопок)
 		title: 'Поделиться',
-		// Заголовок записи на стене
-		pageTitle: null,
-		// Описание записи на стене
-		description: null,
-		// Url записи на стене
-		url: null,
-		// Изображение записи на стене
-		image: null,
+		// Тип кнопки (iframe, custom)
+		buttonType: 'custom',
 		// Url всплывающего окна
-		counterUrl: '//connect.mail.ru/share_count?url_list={url}&callback=1&func=?',
+		counterUrl: '//connect.mail.ru/share_count?url_list={pageUrl}&callback=1&func=?',
 		// Url для получения счетчика
-		popupUrl: 'https://connect.mail.ru/share?share_url={url}&title={title}&description={description}&image_url={image}',
+		popupUrl: 'https://connect.mail.ru/share?share_url={pageUrl}&title={pageTitle}&description={pageDescription}&image_url={pageImage}',
 		// Ширина всплывающего окна
 		popupWidth: 492,
 		// Высота всплывающего окна
@@ -34,11 +28,8 @@
 	};
 
 	button.convertNumber = function(data) {
-		console.log(data);
 		for( var url in data ) {
 			if( data.hasOwnProperty(url) ) {
-				console.log(url);
-				console.log(data[url].shares);
 				return data[url].shares;
 			}
 		}

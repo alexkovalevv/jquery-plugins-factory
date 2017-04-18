@@ -15,14 +15,14 @@
   display: none;
 }
 .aika-sbtns-plugin .aika-sbtns-control.aika-sbtns-button-loaded {
-  background: none;
+  background: none !important;
 }
 .aika-sbtns-plugin .aika-sbtns-control.aika-sbtns-button-loaded .aika-sbtns-control-inner-wrap {
-  display: inline-block;
+  display: inline-block !important;
 }
 .aika-sbtns-plugin .aika-sbtns-control.aika-sbtns-counter-on .aika-sbtns-btn-counter {
-  display: inline-block;
+  display: inline-block !important;
 }
 .aika-sbtns-plugin .aika-sbtns-control.aika-sbtns-counter-off .aika-sbtns-btn-counter {
-  display: none;
+  display: none !important;
 }

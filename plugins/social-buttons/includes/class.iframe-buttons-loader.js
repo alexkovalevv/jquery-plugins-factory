@@ -51,6 +51,8 @@
 			widget.attr("scrolling", "no");
 			widget.attr("width", "180");
 			widget.attr("height", "20");
+			widget.attr("wmode", "transparent");
+			widget.css("position", "absolute");
 
 			widgetContanier.append(widget);
 

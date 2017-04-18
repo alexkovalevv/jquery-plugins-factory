@@ -16,15 +16,16 @@
 		// Заголовок кнопки (только для шкафчиков или произвольных кнопок)
 		title: 'Поделиться',
 		// Тип кнопки (iframe, custom)
-		// по умолчанию iframe
 		buttonType: 'iframe',
-		// Url которым нужно поделиться
-		url: null,
-		// if set, then use the Share Dialog
+		// если установлено true, тогда используем диалоговое окно поделиться
 		shareDialog: false,
-		counterUrl: 'http://graph.facebook.com/{url}',
-		popupUrl: '//www.facebook.com/sharer/sharer.php?u={url}',
+		// Url всплывающего окна
+		counterUrl: 'http://graph.facebook.com/{pageUrl}',
+		// Url для получения счетчика
+		popupUrl: '//www.facebook.com/sharer/sharer.php?u={pageUrl}',
+		// Ширина всплывающего окна
 		popupWidth: 600,
+		// Высота всплывающего окна
 		popupHeight: 359
 	};
 
@@ -54,11 +55,10 @@
 		this.button.attr('id', this.uq(this.name + '-' + 'widget-id') + Math.floor((Math.random() * 999999) + 1));
 
 		this.createIframeButton(this.button, button.name, {
-			url: this.url,
+			url: this.pageUrl,
 			counter: this.counter,
 			lang: this.lang,
 			shareDialog: this.options.shareDialog
-			//layout: this.groupOptions.layout,
 		});
 	};
 

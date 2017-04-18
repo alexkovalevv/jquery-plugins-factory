@@ -267,46 +267,6 @@
 				var self = this;
 
 				return {
-					/**
-					 * Унифицирует переденное имя или класс
-					 * @param value string
-					 * @param separator string
-					 * @returns {*}
-					 * @private
-					 */
-					uq: function(value, separator) {
-						if( !value ) {
-							return null;
-						}
-						if( !separator ) {
-							separator = '-';
-						}
-						return this.prefix + separator + value;
-					},
-					addClass: function(element, className) {
-						this.addClasses(element, className);
-					},
-
-					addClasses: function(element, classes) {
-						if( !element || !classes ) {
-							return;
-						}
-
-						if( $.isArray(classes) ) {
-							for( var i = 0; i < classes.length; i++ ) {
-								element.addClass(this.uq(classes[i]));
-							}
-							return;
-						}
-						element.addClass(this.uq(classes));
-					},
-					removeClass: function(element, className) {
-						if( element.hasClass(className) ) {
-							element.removeClass(this.uq(className));
-							return true;
-						}
-						return false;
-					},
 					addHook: function(eventName, callback, priority, global) {
 						pluginId = pluginId || this.id;
 						return self._addHook(pluginId, eventName, callback, priority, global);

@@ -8,18 +8,86 @@
 (function($) {
 	'use strict';
 
+	$.aikaApi.tools.openWindow = function(url, params, onCloseCallback) {
+		if( !params ) {
+			throw new Error('Не переданы обязательные параметры');
+		}
+		var winName = params.winName || 'Безымянное',
+			width = params.width || 550,
+			height = params.height || 420,
+			positionX = screen.width ? (screen.width / 2 - width / 2 + $.aikaApi.tools.findLeftWindowBoundry()) : 0,
+			positionY = screen.height ? (screen.height / 2 - height / 2 + $.aikaApi.tools.findTopWindowBoundry()) : 0;
+
+		var win = window.open(
+			url,
+			winName,
+			"width=" + width + ",height=" + height + ",left=" + positionX + ",top=" + positionY + ",toolbar=0,location=0,status=0,menubar=0,resizable=yes,scrollbars=yes,status=yes"
+		);
+
+		if( onCloseCallback ) {
+			var pollTimer = setInterval(function() {
+				if( !win || win.closed !== false ) {
+					clearInterval(pollTimer);
+					onCloseCallback && onCloseCallback();
+				}
+			}, 300);
+		}
+
+		return win;
+	};
+
+	$.aikaApi.tools.trackWindow = function(urlPart, onCloseCallback) {
+		var funcOpen = window.open;
+		window.open = function(url, name, params) {
+
+			var winref = funcOpen(url, name, params);
+
+			if( !url ) {
+				return winref;
+			}
+
+			if( url.indexOf(urlPart) === -1 ) {
+				return winref;
+			}
+
+			var pollTimer = setInterval(function() {
+				if( !winref || winref.closed !== false ) {
+					clearInterval(pollTimer);
+					onCloseCallback && onCloseCallback();
+				}
+			}, 300);
+
+			return winref;
+		};
+	};
+
 	/**
-	 * Создает Html шаблон
-	 * @param tmpl string
-	 * @param context array
-	 * @param filter
-	 * @returns {XML|string|void}
+	 * Преобразует url схему с подменой текстовых переменных
+	 * @param tmpl
+	 * @param context
+	 * @returns {*}
 	 */
-	$.aikaApi.tools.createSkin = function(tmpl, context, filter) {
-		return tmpl.replace(/\{([^\}]+)\}/g, function(m, key) {
-			// If key doesn't exists in the context we should keep template tag as is
-			return key in context ? (filter ? filter(context[key]) : context[key]) : m;
-		});
+	$.aikaApi.tools.buildUrl = function(tmpl, context) {
+		var url = $.aikaApi.tools.URL(tmpl),
+			query = url.query(),
+			regex = /\{([^\}]+)\}/;
+
+		var newUrlParams = [];
+
+		for( var i = 0; i < query.length; i++ ) {
+			var param = query[i];
+			if( regex.test(param[1]) ) {
+				var stringVar = param[1].replace(regex, '$1');
+				if( context[stringVar] && (typeof context[stringVar] !== 'object' || typeof context[stringVar] !== 'function') ) {
+					newUrlParams.push([param[0], encodeURIComponent(context[stringVar])]);
+				}
+			} else {
+				newUrlParams.push([param[0], param[1]]);
+			}
+		}
+
+		url.query(newUrlParams);
+		return url.toString();
 	};
 
 	/*
