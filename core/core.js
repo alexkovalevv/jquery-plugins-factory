@@ -13,7 +13,7 @@
 		_pluginObjects = {},
 		_pluginClasses = {};
 
-	$.aikaCore = $.aikaCore || (function() {
+	$.wbcrCore = $.wbcrCore || (function() {
 		var app = {
 
 			_registerPlugin: function(pluginName, plugin) {
@@ -107,7 +107,7 @@
 			},
 
 			_deregisterPlugin: function(pluginName) {
-				//$.aikaApi.tools.arrayUnset(_loadPlugins, appId);
+				//$.wbcrApi.tools.arrayUnset(_loadPlugins, appId);
 			},
 
 			_registerPluginInjection: function(pluginName, injectionName, injection) {
@@ -120,7 +120,7 @@
 			},
 
 			_deregisterPluginInjection: function(pluginName, injectionName) {
-				//$.aikaApi.tools.arrayUnset(_loadPluginInjections, appId);
+				//$.wbcrApi.tools.arrayUnset(_loadPluginInjections, appId);
 			},
 
 			/**
@@ -246,7 +246,7 @@
 						throw new Error('Класс ' + classNames[i] + ' не зарегистрирован.');
 					}
 
-					extendClass = $.extend(true, extendClass, $.aikaApi.tools.extend(_pluginClasses[pluginName][classNames[i]]));
+					extendClass = $.extend(true, extendClass, $.wbcrApi.tools.extend(_pluginClasses[pluginName][classNames[i]]));
 				}
 
 				return extendClass;
@@ -296,9 +296,9 @@
 			 * @private
 			 */
 			_addHook: function(pluginId, eventName, callback, priority, global) {
-				$.aikaApi.filters().add(pluginId + '.' + eventName, callback, priority);
+				$.wbcrApi.filters().add(pluginId + '.' + eventName, callback, priority);
 				if( global ) {
-					$.aikaApi.filters().add(eventName, callback, priority);
+					$.wbcrApi.filters().add(eventName, callback, priority);
 				}
 			},
 
@@ -316,18 +316,18 @@
 				}
 				//args.unshift(this);
 
-				$.aikaApi.filters().run(pluginId + '.' + eventName, args);
+				$.wbcrApi.filters().run(pluginId + '.' + eventName, args);
 				if( global ) {
-					$.aikaApi.filters().run(eventName, args);
+					$.wbcrApi.filters().run(eventName, args);
 				}
 
 				// jquery api
-				//this.element.trigger('aika-' + eventName, args);
+				//this.element.trigger('wbcr-' + eventName, args);
 
 				// global api
 				var globalArgs = args.slice();
 
-				$.aikaApi.filters().run('aika-' + eventName, globalArgs);
+				$.wbcrApi.filters().run('wbcr-' + eventName, globalArgs);
 			},
 
 			/**
@@ -339,7 +339,7 @@
 			 * @private
 			 */
 			_addFilter: function(pluginId, eventName, callback, priority) {
-				$.aikaApi.filters().add(pluginId + '.' + eventName, callback, priority);
+				$.wbcrApi.filters().add(pluginId + '.' + eventName, callback, priority);
 			},
 
 			/**
@@ -365,12 +365,12 @@
 				args.unshift(input);
 
 				// filters api
-				var result = $.aikaApi.filters().run(pluginId + '.' + eventName, args);
+				var result = $.wbcrApi.filters().run(pluginId + '.' + eventName, args);
 
 				args[0] = result;
 
 				if( global ) {
-					result = $.aikaApi.filters().run(eventName, args);
+					result = $.wbcrApi.filters().run(eventName, args);
 				}
 
 				return result;

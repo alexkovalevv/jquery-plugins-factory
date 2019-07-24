@@ -12,7 +12,7 @@
 		window.__onp_wdgt_ok_share_couter_callbacks = {};
 	}
 
-	var button = $.aikaCore.extendPluginClass('aikaSocialButtons', ['control', 'iframe-buttons-loader']);
+	var button = $.wbcrCore.extendPluginClass('wcSocialButtons', ['control', 'iframe-buttons-loader']);
 
 	button.name = 'ok-share';
 
@@ -37,7 +37,7 @@
 
 	button.counterInit = function() {
 		var self = this;
-		$(document).bind($.aikaApi.tools.hash('ok-counter-ready-' + this.index), function(e, index, number) {
+		$(document).bind($.wbcrApi.tools.hash('ok-counter-ready-' + this.index), function(e, index, number) {
 			self._deferred.resolve(number);
 		});
 		this.initCheck();
@@ -98,7 +98,7 @@
 	 */
 	button.getCounterByVkMethod = function(index, number) {
 		if( index > 100 ) {
-			$(document).trigger($.aikaApi.tools.hash('ok-counter-ready-' + index), [index, number]);
+			$(document).trigger($.wbcrApi.tools.hash('ok-counter-ready-' + index), [index, number]);
 		} else {
 			window.__onp_wdgt_ok_share_couter_callbacks[index] && window.__onp_wdgt_ok_share_couter_callbacks[index](index, number);
 		}
@@ -111,6 +111,6 @@
 
 	};
 
-	$.aikaCore.addPluginObject('aikaSocialButtons', 'buttons', button.name, button);
+	$.wbcrCore.addPluginObject('wcSocialButtons', 'buttons', button.name, button);
 
 })(jQuery);

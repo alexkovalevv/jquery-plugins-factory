@@ -9,12 +9,12 @@
 (function($) {
 	'use strict';
 
-	if( !$.aikaMagicBox ) {
-		$.aikaMagicBox = {};
+	if( !$.wbcrMagicBox ) {
+		$.wbcrMagicBox = {};
 	}
 
-	if( !$.aikaMagicBox.themes ) {
-		$.aikaMagicBox.themes = {};
+	if( !$.wbcrMagicBox.themes ) {
+		$.wbcrMagicBox.themes = {};
 	}
 
 })(jQuery);

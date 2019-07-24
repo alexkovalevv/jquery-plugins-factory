@@ -2,13 +2,12 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>Тестирование aika framework</title>
+    <title>Тестирование wbcr framework</title>
     <script src="libs/jquery.min.js"></script>
     <script src="libs/modernizr.custom.js"></script>
-    <script src="libs/classie.js"></script>
-    <script src="libs/dialogFx.js"></script>
     <link rel="stylesheet" href="core/assets/css/modals.css">
     <script src="core/vars.js"></script>
+    <script src="core/mods/factory.dialogs.js"></script>
     <script src="core/includes/api.tools.js"></script>
     <script src="core/includes/api.punycode.js"></script>
     <script src="core/includes/api.urls.js"></script>
@@ -50,7 +49,7 @@
     <script>
         (function($) {
             $(function() {
-                $('.test').aikaSocialButtons({
+                $('.test').wcSocialButtons({
                     pageTitle: '',
                     pageUrl: 'https://yandex.ru',
                     pageDescription: '',
@@ -60,7 +59,6 @@
                         'twitter-tweet',
                         'tumblr-share',
                         'pinterest-share',
-                        'facebook-share',
                         'ok-share',
                         'mail-share',
                         'google-share',

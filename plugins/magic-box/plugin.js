@@ -9,7 +9,7 @@
 
 (function($) {
 	'use strict';
-	$.aikaCore.registerPlugin('aikaMagicBox', {
+	$.wbcrCore.registerPlugin('wbcrMagicBox', {
 		_defaults: {
 			contentLock: true,
 
@@ -85,14 +85,14 @@
 
 			// some themes also have defaults options,
 			// merging the global default option with the theme default options
-			if( $.aikaMagicBox.themes[theme] ) {
+			if( $.wbcrMagicBox.themes[theme] ) {
 				this.addFilter('filter-default-options', function(defaults) {
-					return $.extend(true, {}, defaults, $.aikaMagicBox.themes[theme])
+					return $.extend(true, {}, defaults, $.wbcrMagicBox.themes[theme])
 				});
 			}
 
 			// ie 10-11 fix (they doesn't support the blur filter)
-			if( 'blurring' === this.options.overlap.mode && !$.aikaApi.supportBlurring() ) {
+			if( 'blurring' === this.options.overlap.mode && !$.wbcrApi.supportBlurring() ) {
 				this.options.overlap.mode = this.options.overlap.altMode;
 			}
 		},
@@ -274,9 +274,9 @@
 			var element = (this.element.parent().is('a')) ? this.element.parent() : this.element;
 			element.addClass(this.uq("content"));
 
-			var browser = ($.aikaApi.browser.mozilla && 'mozilla') ||
-				($.aikaApi.browser.opera && 'opera') ||
-				($.aikaApi.browser.webkit && 'webkit') || 'msie';
+			var browser = ($.wbcrApi.browser.mozilla && 'mozilla') ||
+				($.wbcrApi.browser.opera && 'opera') ||
+				($.wbcrApi.browser.webkit && 'webkit') || 'msie';
 
 			this.magicBox = $("<div></div>");
 			this.magicBox.addClass(this.uq("magic-box"));
@@ -291,7 +291,7 @@
 			//var screen = $("<div class='onp-sl-screen onp-sl-screen-default'></div>").appendTo(this.innerWrap);
 			//this.screens['default'] = this.defaultScreen = screen;
 
-			$.aikaApi.isTouch()
+			$.wbcrApi.isTouch()
 				? this.magicBox.addClass(this.uq("touch"))
 				: this.magicBox.addClass(this.uq("no-touch"));
 
@@ -480,13 +480,13 @@
 					family = family + ":" + fontData.styles.join(",");
 				}
 
-				var url = $.aikaApi.tools.updateQueryStringParameter(base, 'family', family);
+				var url = $.wbcrApi.tools.updateQueryStringParameter(base, 'family', family);
 
 				if( fontData.subset && fontData.subset.length ) {
-					url = $.aikaApi.tools.updateQueryStringParameter(url, 'subset', fontData.subset.join(","));
+					url = $.wbcrApi.tools.updateQueryStringParameter(url, 'subset', fontData.subset.join(","));
 				}
 
-				var hash = $.aikaApi.tools.hash(url);
+				var hash = $.wbcrApi.tools.hash(url);
 				if( $("#onp-sl-font-" + hash).length > 0 ) {
 					continue;
 				}

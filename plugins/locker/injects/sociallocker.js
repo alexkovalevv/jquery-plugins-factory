@@ -8,7 +8,7 @@
 
 (function($) {
 	'use strict';
-	$.aikaCore.registerPluginInjection('aikaLocker', 'sociallocker', {
+	$.wbcrCore.registerPluginInjection('wbcrLocker', 'sociallocker', {
 
 		_injectionName: 'sociallocker',
 
@@ -23,13 +23,13 @@
 
 			var buttonsContanier = $('<div style="margin-left:50px">Поддержите наш канал и наши сообщества, нажмите на одну из кнопок, чтобы посмотреть видео. Мы рады любой помощи, даже столь незначительной как подписка или лайк, благодаря вам мы развиваемся и продолжаем радовать людей различными новинками.</div>');
 
-			$(this.element).aikaMagicBox({
+			$(this.element).wbcrMagicBox({
 				id: self.pluginId,
 				//useInjections: ['socialbuttons', 'custom-forms'],
 				content: buttonsContanier
 			});
 
-			$(buttonsContanier).aikaSocialButtons({
+			$(buttonsContanier).wcSocialButtons({
 				order: ['tumblr-share', 'google-share', 'pinterest-share', 'vkontakte-share']
 			});
 

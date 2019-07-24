@@ -12,7 +12,7 @@
 		window.__onp_wdgt_vk_share_couter_callbacks = {};
 	}
 
-	var button = $.aikaCore.extendPluginClass('aikaSocialButtons', ['control', 'iframe-buttons-loader']);
+	var button = $.wbcrCore.extendPluginClass('wcSocialButtons', ['control', 'iframe-buttons-loader']);
 
 	button.name = 'vk-share';
 
@@ -37,24 +37,24 @@
 	button._extractUrl = function() {
 		var URL = this.options.url || window.location.href;
 
-		if( $.aikaApi.tools.checkDomainType(URL) == 'cyrillic' ) {
+		if( $.wbcrApi.tools.checkDomainType(URL) == 'cyrillic' ) {
 			var arrUrlParts = URL.split("/");
-			URL = arrUrlParts[0] + '//' + $.aikaApi.punycode.toASCII($.aikaApi.tools.normalizecyrillicDomain(arrUrlParts[2]));
+			URL = arrUrlParts[0] + '//' + $.wbcrApi.punycode.toASCII($.wbcrApi.tools.normalizecyrillicDomain(arrUrlParts[2]));
 		}
-		return $.aikaApi.tools.URL.normalize(URL);
+		return $.wbcrApi.tools.URL.normalize(URL);
 	};
 
 	button.prepareOptions = function() {
 		this.index = parseInt(this.index) + 100;
 
-		if( $.aikaApi.tools.checkDomainType(this.url) == 'punycode' ) {
+		if( $.wbcrApi.tools.checkDomainType(this.url) == 'punycode' ) {
 			this.counter = false;
 		}
 	};
 
 	button.counterInit = function() {
 		var self = this;
-		$(document).bind($.aikaApi.tools.hash('vk-counter-ready-' + this.index), function(e, index, number) {
+		$(document).bind($.wbcrApi.tools.hash('vk-counter-ready-' + this.index), function(e, index, number) {
 			self._deferred.resolve(number);
 		});
 		this.initCheck();
@@ -118,7 +118,7 @@
 	 */
 	button.getCounterByVkMethod = function(index, number) {
 		if( index > 100 ) {
-			$(document).trigger($.aikaApi.tools.hash('vk-counter-ready-' + index), [index, number]);
+			$(document).trigger($.wbcrApi.tools.hash('vk-counter-ready-' + index), [index, number]);
 		} else {
 			window.__onp_wdgt_vk_share_couter_callbacks[index] && window.__onp_wdgt_vk_share_couter_callbacks[index](index, number);
 		}
@@ -157,6 +157,6 @@
 		});
 	};
 
-	$.aikaCore.addPluginObject('aikaSocialButtons', 'buttons', button.name, button);
+	$.wbcrCore.addPluginObject('wcSocialButtons', 'buttons', button.name, button);
 
 })(jQuery);

@@ -8,7 +8,7 @@
 (function($) {
 	'use strict';
 
-	var button = $.aikaCore.extendPluginClass('aikaSocialButtons', 'control');
+	var button = $.wbcrCore.extendPluginClass('wcSocialButtons', 'control');
 
 	button.name = "twitter-tweet";
 
@@ -39,9 +39,9 @@
 	// Извлекает url страницы
 	button._extractPageUrl = function() {
 		if( !this.options.pageUrl && $("link[rel='canonical']").length > 0 ) {
-			return $.aikaApi.tools.URL.normalize($("link[rel='canonical']").attr('href'));
+			return $.wbcrApi.tools.URL.normalize($("link[rel='canonical']").attr('href'));
 		}
-		return $.aikaApi.tools.URL.normalize(this.options.pageUrl || window.location.href);
+		return $.wbcrApi.tools.URL.normalize(this.options.pageUrl || window.location.href);
 	};
 
 	// Извлекает заголовок страницы
@@ -75,6 +75,6 @@
 			'</svg>';
 	};
 
-	$.aikaCore.addPluginObject('aikaSocialButtons', 'buttons', button.name, button);
+	$.wbcrCore.addPluginObject('wcSocialButtons', 'buttons', button.name, button);
 
 })(jQuery);

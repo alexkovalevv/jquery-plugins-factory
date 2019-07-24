@@ -8,7 +8,7 @@
 
 (function($) {
 	'use strict';
-	$.aikaCore.registerPlugin('aikaLocker', {
+	$.wbcrCore.registerPlugin('wbcrLocker', {
 
 		_defaults: {
 			// Загружаемый контент при открытии замка
@@ -87,6 +87,6 @@
 	});
 
 	/*$(document).ready(function() {
-	 $('.content').aikaLocker();
+	 $('.content').wbcrLocker();
 	 });*/
 })(jQuery);

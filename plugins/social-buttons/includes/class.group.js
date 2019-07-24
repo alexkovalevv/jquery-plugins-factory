@@ -9,7 +9,7 @@
 (function($) {
 	'use strict';
 
-	$.aikaPluginSocialButtons.group = {
+	$.wbcrPluginSocialButtons.group = {
 
 		/**
 		 * Инициализирует группу социальных кнопок
@@ -31,12 +31,12 @@
 			    template = this.options.template;
 			    templateName = template;
 
-			    if( !$.aikaPluginSocialButtons.groupThemes[templateName] ) {
+			    if( !$.wbcrPluginSocialButtons.groupThemes[templateName] ) {
 				    this.showCriticalError('Шаблон {'+ templateName +'} кнопок не существует.');
 				    return;
 			    }
 
-			    getTemplate = $.aikaPluginSocialButtons.groupThemes[templateName];
+			    getTemplate = $.wbcrPluginSocialButtons.groupThemes[templateName];
 		    } else if( template && typeof template === 'function') {
 			    getTemplate = template;
 		    } else {
@@ -57,18 +57,18 @@
 
 			// Устанавливаем выравнивание кнопок
 			if( this.options.align ) {
-				if( !$.aikaApi.tools.inArray(this.options.align, ['left', 'center', 'right']) ) {
+				if( !$.wbcrApi.tools.inArray(this.options.align, ['left', 'center', 'right']) ) {
 					this.showWarning('Выбранная вами тема не поддерживает "' + this.options.align + '" выравнивание кнопок."', '_render')
 					this.options.align = this._default.align;
 				}
 				themeVars['groupContanierClasses'] += ' ' + this.uq('group-align-' + this.options.align);
 			}
 
-			return $.aikaApi.tools.createSkin(getTemplate(), themeVars);
+			return $.wbcrApi.tools.createSkin(getTemplate(), themeVars);
 		},
 
 		_createButton: function(buttonName) {
-			if( !$.aikaPluginSocialButtons.buttons[buttonName] ) {
+			if( !$.wbcrPluginSocialButtons.buttons[buttonName] ) {
 				this.showCriticalError('Кнопки {' + buttonName + '} не существует.');
 				return;
 			}
@@ -83,8 +83,8 @@
 				this.pluginOptions[networkName] = {};
 			}
 
-			$.aikaPluginSocialButtons.buttons[buttonName].init(this.pluginOptions[networkName], this.plugin);
-			return $.aikaPluginSocialButtons.buttons[buttonName].render();
+			$.wbcrPluginSocialButtons.buttons[buttonName].init(this.pluginOptions[networkName], this.plugin);
+			return $.wbcrPluginSocialButtons.buttons[buttonName].render();
 		},
 
 		render: function() {

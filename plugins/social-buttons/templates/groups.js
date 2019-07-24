@@ -8,7 +8,7 @@
 (function($) {
 	'use strict';
 
-	$.aikaPluginSocialButtons.groupThemes['default'] = function() {
+	$.wbcrPluginSocialButtons.groupThemes['default'] = function() {
 	    return '<div class="{groupContanierClasses}">' +
 			        '<ul class="{buttonsContanierClassess}">{buttons}</ul>'+
 			        '<div class="{groupCounterClasses}">{groupCounter}</div>'+

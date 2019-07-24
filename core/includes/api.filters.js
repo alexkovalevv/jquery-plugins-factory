@@ -12,7 +12,7 @@
 	var _items = {},
 		_priorities = {};
 
-	$.aikaApi.filters = $.aikaApi.filters || function() {
+	$.wbcrApi.filters = $.wbcrApi.filters || function() {
 
 		var filter = {
 

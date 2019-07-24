@@ -27,7 +27,7 @@
 		 */
 		_error = {};
 
-	$.aikaApi.sdk = $.aikaApi.sdk || (function() {
+	$.wbcrApi.sdk = $.wbcrApi.sdk || (function() {
 
 		var sdk = {
 
@@ -46,7 +46,7 @@
 			 * @return object
 			 */
 			_getSDK: function(name) {
-				name = $.aikaApi.tools.camelCase(name);
+				name = $.wbcrApi.tools.camelCase(name);
 				if( _sdk[name] ) {
 					return _sdk[name];
 				}

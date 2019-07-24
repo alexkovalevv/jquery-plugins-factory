@@ -9,11 +9,11 @@
 
 	// Theme: Great Attractor
 
-	$.aikaMagicBox.themes['great-attractor'] = {};
+	$.wbcrMagicBox.themes['great-attractor'] = {};
 
 	// Theme: Friendly Giant
 
-	$.aikaMagicBox.themes['friendly-giant'] = {
+	$.wbcrMagicBox.themes['friendly-giant'] = {
 
 		theme: {
 			fonts: [
@@ -27,7 +27,7 @@
 
 	// Theme: Dark Force
 
-	$.aikaMagicBox.themes['dark-force'] = {
+	$.wbcrMagicBox.themes['dark-force'] = {
 
 		theme: {
 			fonts: [
@@ -41,7 +41,7 @@
 
 	// Theme: Starter
 
-	$.aikaMagicBox.themes['starter'] = {
+	$.wbcrMagicBox.themes['starter'] = {
 
 		socialButtons: {
 			layout: 'horizontal',
@@ -52,7 +52,7 @@
 
 	// Theme: Secrets
 
-	$.aikaMagicBox.themes['secrets'] = {
+	$.wbcrMagicBox.themes['secrets'] = {
 
 		socialButtons: {
 			layout: 'horizontal',
@@ -63,7 +63,7 @@
 
 	// Theme: Dandyish
 
-	$.aikaMagicBox.themes['dandyish'] = {
+	$.wbcrMagicBox.themes['dandyish'] = {
 
 		socialButtons: {
 			unsupported: ['twitter-follow'],
@@ -75,7 +75,7 @@
 
 	// Theme: Glass
 
-	$.aikaMagicBox.themes['glass'] = {
+	$.wbcrMagicBox.themes['glass'] = {
 
 		socialButtons: {
 			layout: 'horizontal',
@@ -86,7 +86,7 @@
 
 	// Theme: Flat
 
-	$.aikaMagicBox.themes['flat'] = {
+	$.wbcrMagicBox.themes['flat'] = {
 
 		socialButtons: {
 			layout: 'horizontal',

@@ -8,19 +8,19 @@
 (function($) {
 	'use strict';
 
-	if( !$.aikaApi ) {
-		$.aikaApi = {};
+	if( !$.wbcrApi ) {
+		$.wbcrApi = {};
 	}
 
-	if( !$.aikaApi.lang ) {
-		$.aikaApi.lang = {};
+	if( !$.wbcrApi.lang ) {
+		$.wbcrApi.lang = {};
 	}
 
-	if( !$.aikaApi.tools ) {
-		$.aikaApi.tools = {};
+	if( !$.wbcrApi.tools ) {
+		$.wbcrApi.tools = {};
 	}
 
-	if( !$.aikaApi.storages ) {
-		$.aikaApi.storages = {};
+	if( !$.wbcrApi.storages ) {
+		$.wbcrApi.storages = {};
 	}
 })(jQuery);

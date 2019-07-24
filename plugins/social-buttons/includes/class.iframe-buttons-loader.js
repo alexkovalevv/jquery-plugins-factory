@@ -124,7 +124,7 @@
 		},
 
 		_genWidgetName: function(buttonName) {
-			return $.aikaApi.tools.hash(
+			return $.wbcrApi.tools.hash(
 					buttonName + Math.floor((Math.random() * 999999) + 1)
 				) + 'ab';
 		}
@@ -157,7 +157,7 @@
 	 * Регистрируем класс для управления iframe кнопками
 	 * доступен только один публичный метод createIframeButton
 	 */
-	$.aikaCore.registerPluginClass('aikaSocialButtons', 'iframe-buttons-loader', {
+	$.wbcrCore.registerPluginClass('wcSocialButtons', 'iframe-buttons-loader', {
 		createIframeButton: function($holder, buttonName, options) {
 			// Контентекст метода class.control.js
 			var self = this;

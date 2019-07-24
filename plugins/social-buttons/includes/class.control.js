@@ -21,7 +21,7 @@
 			this.counter = true;
 		}
 
-		this.pageUrlHash = $.aikaApi.tools.hash(this.pageUrl);
+		this.pageUrlHash = $.wbcrApi.tools.hash(this.pageUrl);
 		this.counterNumber = 0;
 		this.counterCacheName = this.uq('cache-counter') + '-' + this.pageUrlHash;
 
@@ -70,7 +70,7 @@
 
 		var shareUrl = this.makeUrl(this.options.popupUrl, this);
 
-		$.aikaApi.tools.openWindow(shareUrl, {winName: 'Share by ' + this.name}, function() {
+		$.wbcrApi.tools.openWindow(shareUrl, {winName: 'Share by ' + this.name}, function() {
 			// Выполнит хук, если окно было закрыто
 			self.runHook('close-share-window', [self.name, self.options]);
 		});
@@ -226,7 +226,7 @@
 	 * @returns {*}
 	 */
 	socialButton.getCache = function(all) {
-		var counterCache = $.aikaApi.tools.getFromStorage(this.counterCacheName);
+		var counterCache = $.wbcrApi.tools.getFromStorage(this.counterCacheName);
 
 		if( counterCache ) {
 			counterCache = JSON.parse(counterCache);
@@ -265,7 +265,7 @@
 
 		var storageData = JSON.stringify(getCounters);
 
-		$.aikaApi.tools.setStorage(self.counterCacheName, storageData, 1);
+		$.wbcrApi.tools.setStorage(self.counterCacheName, storageData, 1);
 
 		return true;
 	};
@@ -376,7 +376,7 @@
 
 	// Извлекает url страницы
 	socialButton._extractPageUrl = function() {
-		return $.aikaApi.tools.URL.normalize(this.options.pageUrl || window.location.href);
+		return $.wbcrApi.tools.URL.normalize(this.options.pageUrl || window.location.href);
 	};
 
 	// Извлекает заголовок страницы
@@ -400,7 +400,7 @@
 	// Извлекает изображение страницы
 	// Обрабатывается внутри кнопки
 	socialButton.makeUrl = function(url, context) {
-		return $.aikaApi.tools.buildUrl(url, context);
+		return $.wbcrApi.tools.buildUrl(url, context);
 	};
 
 	/*socialButton.showWarning = function(message, sender, showForce) {
@@ -411,6 +411,6 @@
 	 return this.plugin.showCriticalError(message, sender);
 	 };*/
 
-	$.aikaCore.registerPluginClass('aikaSocialButtons', 'control', socialButton);
+	$.wbcrCore.registerPluginClass('wcSocialButtons', 'control', socialButton);
 
 })(jQuery);

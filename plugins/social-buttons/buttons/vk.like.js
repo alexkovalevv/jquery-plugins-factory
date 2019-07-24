@@ -12,7 +12,7 @@
 (function($) {
 	'use strict';
 
-	var button = $.aikaCore.extendPluginClass('aikaSocialButtons', ['control', 'iframe-buttons-loader']);
+	var button = $.wbcrCore.extendPluginClass('wcSocialButtons', ['control', 'iframe-buttons-loader']);
 
 	button.name = "vk-like";
 
@@ -36,11 +36,11 @@
 	button._extractUrl = function() {
 		var URL = this.options.pageUrl || window.location.href;
 
-		if( $.aikaApi.tools.checkDomainType(URL) == 'cyrillic' ) {
+		if( $.wbcrApi.tools.checkDomainType(URL) == 'cyrillic' ) {
 			var arrUrlParts = URL.split("/");
-			URL = arrUrlParts[0] + '//' + $.aikaApi.punycode.toASCII($.aikaApi.tools.normalizecyrillicDomain(arrUrlParts[2]));
+			URL = arrUrlParts[0] + '//' + $.wbcrApi.punycode.toASCII($.wbcrApi.tools.normalizecyrillicDomain(arrUrlParts[2]));
 		}
-		return $.aikaApi.tools.URL.normalize(URL);
+		return $.wbcrApi.tools.URL.normalize(URL);
 	};
 
 	button.renderButton = function($holder) {
@@ -60,6 +60,6 @@
 		});
 	};
 
-	$.aikaCore.addPluginObject('aikaSocialButtons', 'buttons', button.name, button);
+	$.wbcrCore.addPluginObject('wcSocialButtons', 'buttons', button.name, button);
 
 })(jQuery);

@@ -13,7 +13,9 @@
 
 		options: {},
 
-		prefix: 'aika',
+		prefix: 'wbcr',
+
+		dialogIsOpen: false,
 
 		defaults: {
 			appPublic: false,
@@ -48,37 +50,93 @@
 
 		},
 
-		showError: function(message) {
-			var dialog = '<div id="somedialog" class="dialog">' +
-				'<div class="dialog__overlay"></div>' +
-				'<div class="dialog__content">' +
-				'<h2 class="dialog__head">' + message + '</h2>' +
-				'<div class="dialog__text">Произошла ошибка выполнения кода.</div>' +
-				'<div><button class="action" data-dialog-close>Close</button></div>' +
-				'</div>' +
-				'</div>';
+		showErrorDialog: function(message) {
+			this.showDialog('dialog-danger', 'Произошла ошибка', message);
+		},
 
-			$('body').append(dialog);
+		/**
+		 * Публичный вызов диалогового окна
+		 * @param theme
+		 * @param header
+		 * @param message
+		 */
+		showDialog: function(theme, header, message) {
+			if( this.superclass._dialog ) {
+				if( this.superclass.dialogIsOpen ) {
+					this.superclass._hideDialog();
+					this.superclass._showDialog(theme, header, message);
+					return;
+				}
 
-			var dlg = new DialogFx(document.getElementById("somedialog"));
-			dlg.toggle(dlg);
+				this.superclass._showDialog(theme, header, message);
+				return;
+			}
 
-			/*dlg.options.onCloseDialog = function(e) {
-			 $.cookie('onp-sl-promo', '1', {
-			 expires: 7,
-			 path: '/'
-			 });
-			 };*/
+			this.superclass._createDialogMarkup(this.id, theme, header, message);
+		},
 
-			/*$('body').mouseout(function(event) {
-			 if( dlg.isOpen || $.cookie('onp-sl-promo') ) {
-			 return;
-			 }
-			 if( event.relatedTarget == null && event.screenY < 100 ) {
-			 dlg.toggle(dlg);
-			 }
-			 });	*/
+		/**
+		 * Выбрасывает диалоговое окно (ошибка, уведомление, запрос)
+		 * @param pluginId srtring id вызывающего окно плагина
+		 * @param theme string название класса для стилизации окна
+		 * @param header string заголовок окна
+		 * @param message string текстовое сообщение
+		 * @private
+		 */
+		_createDialogMarkup: function(pluginId, theme, header, message) {
+			var self = this;
 
+			if( this._dialog ) {
+				return;
+			}
+
+			if( !theme ) {
+				theme = 'dialog-default';
+			}
+
+			this._dialog = $('<div></div>');
+			this.addClass(this._dialog, ['dialog', 'dialog-plugin-id' + pluginId, theme]);
+
+			this._dialogOverlay = $('<div></div>');
+			this.addClass(this._dialogOverlay, ['dialog-overlay']);
+			this._dialog.append(this._dialogOverlay);
+
+			var content = $('<div class="' + this.uq('dialog-content') + '">' +
+			'<h2 class="' + this.uq('dialog-header') + '">' + header + '</h2>' +
+			'<div class="' + this.uq('dialog-text') + '">' + message + '</div>' +
+			'<div></div>' +
+			'</div>');
+
+			this._dialogCloseButton = $('<a href="#">Закрыть</button>');
+			this.addClass(this._dialogCloseButton, 'dialog-btn-close');
+
+			this._dialogCloseButton.on('click', function() {
+				console.log('close');
+				self._hideDialog();
+				return false;
+			});
+
+			content.append(this._dialogCloseButton.wrap('div'));
+
+			this._dialog.append(content);
+			$('body').append(this._dialog);
+
+			this._dialog.wcFactoryDialog();
+			this._dialog.wcFactoryDialog('dialogShow');
+		},
+
+		_showDialog: function() {
+			if( !this._dialog ) {
+				return;
+			}
+			this._dialog.wcFactoryDialog('dialogShow');
+		},
+
+		_hideDialog: function() {
+			if( !this._dialog ) {
+				return;
+			}
+			this._dialog.wcFactoryDialog('dialogHide');
 		},
 
 		/**
@@ -177,6 +235,6 @@
 		}
 	};
 
-	$.aikaCore.registerPluginClass('core', 'plugin', plugin);
+	$.wbcrCore.registerPluginClass('core', 'plugin', plugin);
 })
 (jQuery);

@@ -687,6 +687,6 @@
 
 	}());
 
-	$.aikaApi.tools.URL = URL;
+	$.wbcrApi.tools.URL = URL;
 
 })($);

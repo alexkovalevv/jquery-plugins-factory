@@ -3,32 +3,33 @@
  * @author Alex Kovalev <alex.kovalevv@gmail.com> 
  * @copyright Alex Kovalev 18.04.2017 
  */
-.dialog,
-.dialog__overlay {
-  position: absolute;
+.wbcr-dialog {
+  position: fixed;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  /* Content */
+}
+.wbcr-dialog,
+.wbcr-dialog .wbcr-dialog-overlay {
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
   z-index: 999;
 }
-.dialog {
-  position: fixed;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-}
-.dialog__overlay {
+.wbcr-dialog .wbcr-dialog-overlay {
+  position: absolute;
   background: rgba(222, 61, 40, 0.78);
   opacity: 0;
-  transition: opacity 0.3s;
+  -webkit-transition: opacity 0.5s;
+  transition: opacity 0.5s;
+  -webkit-backface-visibility: hidden;
 }
-.dialog--open .dialog__overlay {
-  opacity: 1;
-  pointer-events: auto;
-}
-.dialog__content {
+.wbcr-dialog .wbcr-dialog-content {
   width: 50%;
   max-width: 360px;
   min-width: 290px;
@@ -40,11 +41,10 @@
   z-index: 9999;
   opacity: 0;
 }
-.dialog--open .dialog__content {
-  pointer-events: auto;
+.wbcr-dialog.wbcr-dialog-open .wbcr-dialog-overlay {
+  opacity: 1;
 }
-/* Content */
-.dialog h2 {
+.wbcr-dialog .wbcr-dialog-header {
   position: absolute;
   top: 0;
   left: 0;
@@ -55,20 +55,20 @@
   line-height: 2;
   background: #d44933;
 }
-.dialog__text {
-  font-family: Arial;
+.wbcr-dialog .wbcr-dialog-text {
+  font-family: Arial, san-serif;
   font-size: 15px;
   margin-top: 40px;
 }
-.dialog.dialog--open .dialog__content,
-.dialog.dialog--close .dialog__content {
+.wbcr-dialog.wbcr-dialog-open .wbcr-dialog-content,
+.wbcr-dialog.wbcr-dialog-close .wbcr-dialog-content {
   animation-duration: 0.3s;
   animation-fill-mode: forwards;
 }
-.dialog.dialog--open .dialog__content {
+.wbcr-dialog.wbcr-dialog-open .wbcr-dialog-content {
   animation-name: anim-open;
 }
-.dialog.dialog--close .dialog__content {
+.wbcr-dialog.wbcr-dialog-close .wbcr-dialog-content {
   animation-name: anim-close;
 }
 @keyframes anim-open {

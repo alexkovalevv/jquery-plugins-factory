@@ -8,7 +8,7 @@
 (function($) {
 	'use strict';
 
-	var button = $.aikaCore.extendPluginClass('aikaSocialButtons', 'control');
+	var button = $.wbcrCore.extendPluginClass('wcSocialButtons', 'control');
 
 	button.name = 'tumblr-share';
 
@@ -41,6 +41,6 @@
 		return null;
 	};
 
-	$.aikaCore.addPluginObject('aikaSocialButtons', 'buttons', button.name, button);
+	$.wbcrCore.addPluginObject('wcSocialButtons', 'buttons', button.name, button);
 
 })(jQuery);

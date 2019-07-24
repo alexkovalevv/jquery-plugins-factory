@@ -536,7 +536,7 @@
 		// in Rhino or a web browser
 		//root.punycode = punycode;
 
-		jQuery.aikaApi.punycode = punycode;
+		jQuery.wbcrApi.punycode = punycode;
 	}
 
 }(this));

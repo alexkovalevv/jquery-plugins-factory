@@ -1,7 +1,7 @@
 (function($) {
 	'use strict';
 
-	$.aikaPluginSocialButtons.sdk.onp = $.aikaPluginSocialButtons.sdk.onp || {
+	$.wbcrPluginSocialButtons.sdk.onp = $.wbcrPluginSocialButtons.sdk.onp || {
 		name: 'onp',
 		url: 'http://cdn.sociallocker.ru/service/ifbcreator.js',
 		scriptId: 'onp-jssdk',

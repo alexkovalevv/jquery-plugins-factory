@@ -9,11 +9,11 @@
 (function($) {
 	'use strict';
 
-	if( !$.aikaWidgetTimer ) {
-		$.aikaWidgetTimer = {};
+	if( !$.wbcrWidgetTimer ) {
+		$.wbcrWidgetTimer = {};
 	}
 
-	$.aikaWidgetTimer = {
+	$.wbcrWidgetTimer = {
 		// --------------------------------------------------------------------------------------
 		// Timer
 		// --------------------------------------------------------------------------------------
@@ -54,7 +54,7 @@
 					self.timerCounter.text(self.counter);
 
 					// Opera fix.
-					if( $.aikaCore.browser.opera ) {
+					if( $.wbcrCore.browser.opera ) {
 						var box = self.timerCounter.clone();
 						box.insertAfter(self.timerCounter);
 						self.timerCounter.remove();

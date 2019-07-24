@@ -9,11 +9,11 @@
 (function($) {
 	'use strict';
 
-	if( !$.aikaPluginSocialButtons.buttonThemes ) {
-		$.aikaPluginSocialButtons.buttonThemes = {};
+	if( !$.wbcrPluginSocialButtons.buttonThemes ) {
+		$.wbcrPluginSocialButtons.buttonThemes = {};
 	}
 
-	$.aikaPluginSocialButtons.buttonThemes['default'] = function() {
+	$.wbcrPluginSocialButtons.buttonThemes['default'] = function() {
 		return '<li>' +
 					'<a href="#" class=\"{classes}\" data-button-name="{buttonName}">' +
 						'<span class="{pluginPrefix}-btn-bage">' +

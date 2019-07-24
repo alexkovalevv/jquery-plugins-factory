@@ -327,8 +327,8 @@
 		return new Vague(this, options);
 	};
 
-	$.aikaApi.supportBlurring = function() {
-		if( $.aikaApi.browser.msie && $.aikaApi.browser.version > 9 && $.aikaApi.browser.msie < 12 ) {
+	$.wbcrApi.supportBlurring = function() {
+		if( $.wbcrApi.browser.msie && $.wbcrApi.browser.version > 9 && $.wbcrApi.browser.msie < 12 ) {
 			return false;
 		}
 		if( !cssfilters() && !svgfilters() ) {

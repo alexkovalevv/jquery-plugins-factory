@@ -8,7 +8,7 @@
 (function($) {
 	'use strict';
 
-	$.aikaCore.registerPlugin('aikaSocialButtons', {
+	$.wbcrCore.registerPlugin('wcSocialButtons', {
 		pluginName: 'social-buttons',
 
 		defaults: {
@@ -36,7 +36,6 @@
 			this._setupEvents();
 			this._render();
 
-			this.showError('test test');
 		},
 
 		_extendPrepareOptions: function() {
@@ -54,12 +53,15 @@
 			var self = this;
 
 			$(document).on('click', '.' + this.uq('btn'), function() {
+
 				var buttonName = $(this).data('button-name');
-				if( !self._issetButton[buttonName] ) {
+				if( !self._issetButton(buttonName) ) {
 					return false;
 				}
 				self.runHook('before-open-share-window', [buttonName, self._buttons[buttonName].options]);
-				self._buttons[buttonName].openShareWindow();
+				//self._buttons[buttonName].openShareWindow();
+
+				self.showErrorDialog('test test');
 
 				return false;
 			});
